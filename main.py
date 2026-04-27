@@ -47,4 +47,15 @@ def roulette(probability = 0.5):
 
 #helloworld("print")
 
-roulette()
+def fibonacci_up_to(n):
+    a, b = 0, 1
+    while b <= n:
+        yield b
+        a, b = b, a + b
+
+gen = fibonacci_up_to(10000)
+
+for num in gen:
+    print(num)
+
+# roulette()
