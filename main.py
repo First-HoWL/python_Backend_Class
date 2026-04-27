@@ -49,13 +49,24 @@ def roulette(probability = 0.5):
 
 def fibonacci_up_to(n):
     a, b = 0, 1
-    while b <= n:
-        yield b
+    while a <= n:
+        yield a
         a, b = b, a + b
 
-gen = fibonacci_up_to(10000)
+def num_list(n):
+    i = 0
+    while i < len(n):
+        yield (i, n[i])
+        i += 1
 
-for num in gen:
-    print(num)
+# gen = fibonacci_up_to(10000)
+
+# for num in gen:
+#     print(num)
 
 # roulette()
+
+list = [x for x in fibonacci_up_to(10000)]
+
+for i, x in num_list(list):
+    print(f"{i}. {x}")
