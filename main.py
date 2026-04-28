@@ -92,18 +92,16 @@ def count():
 
 
 def check_list(listss):
-    def check(item):
+    for item in listss:
         if isinstance(item, list):
-            for i in item:
-                yield from check(i)
+            yield from check_list(item)
         else:
             yield item
-
-    for item in listss:
-        yield from check(item)
 
 some_list = [6, [21, 4, 1,[ 4, 6, 1], 3, 1], 3, [32, 9, 0], [1, [3, [3, 9]]], 0]
 
 
 for i in check_list(some_list):
-    print(i)
+    print(i, end=", ")
+
+
