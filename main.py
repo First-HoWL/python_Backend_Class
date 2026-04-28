@@ -33,11 +33,11 @@ def cycleFor(times, delay = 3):
         return wrapp
     return decorator
 
-@shecktime
-@make_prettier("*")
-@cycleFor(5)
-def helloworld(msg):
-    print(msg)
+# @shecktime
+# @make_prettier("*")
+# @cycleFor(5)
+# def helloworld(msg):
+#     print(msg)
 
 @shecktime
 @cycleFor(5, 2)
@@ -98,10 +98,40 @@ def check_list(listss):
         else:
             yield item
 
-some_list = [6, [21, 4, 1,[ 4, 6, 1], 3, 1], 3, [32, 9, 0], [1, [3, [3, 9]]], 0]
+# some_list = [6, [21, 4, 1,[ 4, 6, 1], 3, 1], 3, [32, 9, 0], [1, [3, [3, 9]]], 0]
 
 
-for i in check_list(some_list):
-    print(i, end=", ")
+# for i in check_list(some_list):
+#     print(i, end=", ")
 
 
+
+
+def stopper(times):
+
+    def decorator(func):
+        allready = 0
+        def wrapper(*args, **kwargs):
+            nonlocal allready
+            if (allready >= times):
+                raise Exception("NO!")
+            else:
+                allready += 1
+                func(*args, **kwargs)
+
+        return wrapper
+    return decorator
+
+@stopper(2)
+def helloworld(msg):
+    print(msg)
+
+try:
+    helloworld("print")
+    helloworld("print")
+    helloworld("print")
+    helloworld("print")
+    helloworld("print")
+    helloworld("print")
+except Exception as e:
+    print(f"Exeption: {e}")
