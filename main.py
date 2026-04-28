@@ -1,4 +1,4 @@
-# https://github.com/svitlyi-itstep/PythonWebP35/tree/main  - teacher`s github repo
+# TODO: https://github.com/svitlyi-itstep/PythonWebP35/tree/main  - teacher`s github repo
 
 import time
 import random
@@ -66,7 +66,44 @@ def num_list(n):
 
 # roulette()
 
-list = [x for x in fibonacci_up_to(10000)]
+# list = [x for x in fibonacci_up_to(10000)]
+#
+# for i, x in num_list(list):
+#     print(f"{i}. {x}")
 
-for i, x in num_list(list):
-    print(f"{i}. {x}")
+
+def count():
+    sum = 0
+    count = 0
+    while True:
+        value = yield
+        sum += value
+        count += 1
+        yield sum / count
+
+# gen = count()
+#
+# for i in range(1, 10):
+#     next(gen)
+#     print(gen.send(i))
+#
+# next(gen)
+# print(gen.send(100))
+
+
+def check_list(listss):
+    def check(item):
+        if isinstance(item, list):
+            for i in item:
+                yield from check(i)
+        else:
+            yield item
+
+    for item in listss:
+        yield from check(item)
+
+some_list = [6, [21, 4, 1,[ 4, 6, 1], 3, 1], 3, [32, 9, 0], [1, [3, [3, 9]]], 0]
+
+
+for i in check_list(some_list):
+    print(i)
