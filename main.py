@@ -2,6 +2,9 @@
 
 import time
 import random
+from wsgiref.util import request_uri
+
+
 def make_prettier(symbol = "="):
     def decorator(func):
         def wrapper(*args, **kwargs):
@@ -146,6 +149,15 @@ student = [
     {"name": "Cool Name", "age": "13", "grades": [9, 6, 12, 8, 9, 9]}
 ]
 
+fruits = [
+    {"name": "Apple"},
+    {"name": "Orange"},
+    {"name": "Banana"},
+    {"name": "Melone"},
+    {"name": "Coconut"},
+]
+
+
 # 1.  sorted_student = sorted(student, key = lambda x: int(x["age"]))
 
 # 2.  sorted_student = sorted(student, key = lambda x: sum(x["grades"]) / len(x["grades"]), reverse = True)
@@ -153,10 +165,18 @@ student = [
 # 3. sorted_student = sorted(student, key = lambda x: (-(sum(x["grades"]) / len(x["grades"])), x["name"]))
 
 
+def func(num1, num2, operator):
+    functions = {
+        "sum": lambda x, y: x + y,
+        "sub": lambda x, y: x - y,
+        "mul": lambda x, y: x * y,
+        "div": lambda x, y: x / y,
+        }
+    return functions[operator](num1, num2)
 
+print(func(2, 6, "mul"))
 
-#
-# updated_student = list(map(lambda x: x["avg"] = sum(x["grades"]) / len(x["grades"]), student))
+# updated_student = list(map(lambda x: { **x, "avg": sum(x["grades"]) / len(x["grades"])}, student))
 #
 # for student in updated_student:
 #     print(student)
@@ -166,3 +186,10 @@ student = [
 # for student in sorted_student:
 #     print(student)
 
+#
+# new_list_fruits = filter(lambda fruit: fruit["name"].lower().find("a") != -1 , fruits)
+#
+# updated_fruits_list = list(map(lambda f: {"name": f["name"].upper()}, new_list_fruits))
+#
+# for fruit in updated_fruits_list:
+#      print(fruit)
