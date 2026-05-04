@@ -1,195 +1,90 @@
-# TODO: https://github.com/svitlyi-itstep/PythonWebP35/tree/main  - teacher`s github repo
-
-import time
+from time import sleep
 import random
-from wsgiref.util import request_uri
 
+class Character:
+    def __init__(self, name, damage, evasion=0, armor=0, lifesteal=0., hp=100.):
+        self.name = name
+        self._hp = hp
+        self.armor = armor
+        self.damage = damage
+        self.evasion = evasion
+        self.lifesteal = lifesteal
 
-def make_prettier(symbol = "="):
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            print(symbol*20)
-            func(*args, **kwargs)
-            print(symbol*20)
+    def __str__(self):
+        return f"{self.name} - {self._hp} HP"
 
-        return wrapper
-    return decorator
-def shecktime(func):
-    timestart = time.perf_counter()
-    def wrapp(*args, **kwargs):
-        func(*args, **kwargs)
-        print(f"{round(time.perf_counter() - timestart, 7):.8f} seconds")
-    return wrapp
+    def __repr__(self):
+        return f"{self.name=} \t | {self._hp=} \t | {self.damage=} \t | {self.evasion=} \t | {self.armor=} \t | {self.lifesteal=}"
 
-def cycleFor(times, delay = 3):
-    def decorator(func):
-        def wrapp(*args, **kwargs):
-            for i in range(times):
-                try:
-                    print(f"Attempt {i}...")
-                    func(*args, **kwargs)
-                    print("WIN!!!!")
-                    break
-                except:
-                    time.sleep(delay)
+    @property
+    def hp(self):
+        return self._hp
 
-        return wrapp
-    return decorator
-
-# @shecktime
-# @make_prettier("*")
-# @cycleFor(5)
-# def helloworld(msg):
-#     print(msg)
-
-@shecktime
-@cycleFor(5, 2)
-def roulette(probability = 0.5):
-    if random.random() < probability:
-        raise Exception()
-
-#helloworld("print")
-
-def fibonacci_up_to(n):
-    a, b = 0, 1
-    while a <= n:
-        yield a
-        a, b = b, a + b
-
-def num_list(n):
-    i = 0
-    while i < len(n):
-        yield (i, n[i])
-        i += 1
-
-# gen = fibonacci_up_to(10000)
-
-# for num in gen:
-#     print(num)
-
-# roulette()
-
-# list = [x for x in fibonacci_up_to(10000)]
-#
-# for i, x in num_list(list):
-#     print(f"{i}. {x}")
-
-
-def count():
-    sum = 0
-    count = 0
-    while True:
-        value = yield
-        sum += value
-        count += 1
-        yield sum / count
-
-# gen = count()
-#
-# for i in range(1, 10):
-#     next(gen)
-#     print(gen.send(i))
-#
-# next(gen)
-# print(gen.send(100))
-
-
-def check_list(listss):
-    for item in listss:
-        if isinstance(item, list):
-            yield from check_list(item)
+    @hp.setter
+    def hp(self, value):
+        if value < 0:
+            self._hp = 0
         else:
-            yield item
-
-# some_list = [6, [21, 4, 1,[ 4, 6, 1], 3, 1], 3, [32, 9, 0], [1, [3, [3, 9]]], 0]
+            self._hp = round(value, 3)
 
 
-# for i in check_list(some_list):
-#     print(i, end=", ")
+    def take_damage(self, damage):
+        if random.randint( 1, 100) < self.evasion:
+            return -1
+        else:
+            new_damage = damage - min((damage * (self.armor / 100)), damage)
+            self.hp -= new_damage
+            return new_damage
 
 
 
-
-def stopper(times):
-
-    def decorator(func):
-        allready = 0
-        def wrapper(*args, **kwargs):
-            nonlocal allready
-            if (allready >= times):
-                raise Exception("NO!")
+    def attack(self, other):
+        if self.hp > 0:
+            damage_modify = self.damage + self.damage * (random.randint(-20, 20) / 100)
+            responce = other.take_damage(damage_modify)
+            if responce != -1:
+                self.hp += (responce / 100) * self.lifesteal
+                return responce
             else:
-                allready += 1
-                func(*args, **kwargs)
+                return -1
+        else:
+            return -2
 
-        return wrapper
-    return decorator
+    @property
+    def is_alive(self):
+        return self.hp > 0
 
-@stopper(2)
-def helloworld(msg):
-    print(msg)
+player = Character("Unit 1", 13, 95)
+player2 = Character("Unit 2", 13,  0,7, 50)
 
-# try:
-#     helloworld("print")
-#     helloworld("print")
-#     helloworld("print")
-#     helloworld("print")
-#     helloworld("print")
-#     helloworld("print")
-# except Exception as e:
-#     print(f"Exeption: {e}")
-#
+while player.is_alive and player2.is_alive:
+    print(player.__repr__())
+    print(player2.__repr__())
 
-student = [
-    {"name": "John", "age": "9", "grades": [9, 2, 12, 2, 11, 9]},
-    {"name": "HoWL", "age": "16", "grades": [11, 12, 10, 12, 11, 9]},
-    {"name": "Name", "age": "8", "grades": [2, 2, 6, 3, 7, 8]},
-    {"name": "A Cool Name", "age": "13", "grades": [9, 6, 12, 8, 9, 9]},
-    {"name": "Not Cool Name", "age": "13", "grades": [9, 6, 12, 8, 9, 9]},
-    {"name": "Cool Name", "age": "13", "grades": [9, 6, 12, 8, 9, 9]}
-]
+    attack = player.attack(player2)
 
-fruits = [
-    {"name": "Apple"},
-    {"name": "Orange"},
-    {"name": "Banana"},
-    {"name": "Melone"},
-    {"name": "Coconut"},
-]
+    if attack == -1:
+        print(f"{player2.name} evaded from attack {player.name}")
+    elif attack == -2:
+        print(player2)
+    else:
+        print(f"{player.name} attacks {player2.name}")
+        print(player2)
+        # sleep(1)
 
+    attack = player2.attack(player)
+    if attack == -1:
+        print(f"{player.name} evaded from attack {player2.name}")
+    elif attack == -2:
+        print(player)
+    else:
+        print(f"{player2.name} attacks {player.name}")
+        print(player)
+        # sleep(1)
 
-# 1.  sorted_student = sorted(student, key = lambda x: int(x["age"]))
-
-# 2.  sorted_student = sorted(student, key = lambda x: sum(x["grades"]) / len(x["grades"]), reverse = True)
-
-# 3. sorted_student = sorted(student, key = lambda x: (-(sum(x["grades"]) / len(x["grades"])), x["name"]))
-
-
-def func(num1, num2, operator):
-    functions = {
-        "sum": lambda x, y: x + y,
-        "sub": lambda x, y: x - y,
-        "mul": lambda x, y: x * y,
-        "div": lambda x, y: x / y,
-        }
-    return functions[operator](num1, num2)
-
-print(func(2, 6, "mul"))
-
-# updated_student = list(map(lambda x: { **x, "avg": sum(x["grades"]) / len(x["grades"])}, student))
-#
-# for student in updated_student:
-#     print(student)
-
-# sorted_student = sorted(student, key = lambda x: x["avg"] (-(sum(x["grades"]) / len(x["grades"])), x["name"]))
-#
-# for student in sorted_student:
-#     print(student)
-
-#
-# new_list_fruits = filter(lambda fruit: fruit["name"].lower().find("a") != -1 , fruits)
-#
-# updated_fruits_list = list(map(lambda f: {"name": f["name"].upper()}, new_list_fruits))
-#
-# for fruit in updated_fruits_list:
-#      print(fruit)
+    print("\n")
+    #sleep(1)
+    if not player.is_alive:
+        print(f"{player2.name} - WIN!")
+    if not player2.is_alive:
+        print(f"{player.name} - WIN!")
