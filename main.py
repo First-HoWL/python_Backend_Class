@@ -104,7 +104,7 @@ class Rectangle:
         if self >= other :
             return Rectangle(self.color, self.position, (self.rect[0] + other.rect[0], self.rect[1] + other.rect[1]))
         else:
-            return Circle(other.color, other.position, (self.rect[0] + other.rect[0], self.rect[1] + other.rect[1]))
+            return Rectangle(other.color, other.position, (self.rect[0] + other.rect[0], self.rect[1] + other.rect[1]))
     def __sub__(self, other):
         if self < other:
             return Exception("First rectangle is less then seccond")
