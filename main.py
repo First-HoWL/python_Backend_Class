@@ -1,220 +1,87 @@
+import math
 from time import sleep
 import random
 import pygame as pg
 
+class Bullet:
+    def __init__(self, x=0, y=0, angle=0, speed=0.1):
+        self.x = x
+        self.y = y
+        self.angle = angle
+        self.speed = speed
+        rad = math.radians(self.angle)
 
-class Circle:
-    def __init__(self, color, position, radius):
-        self.position = position
-        self.color = color
-        self.radius = radius
+        self.vx = math.sin(rad) * self.speed
+        self.vy = -math.cos(rad) * self.speed
 
-    @property
-    def radius(self):
-        return self._radius
-
-    @radius.setter
-    def radius(self, value):
-        self._radius = max(value, 0)
-
-    @property
-    def position(self):
-        return self._position
-
-    @position.setter
-    def position(self, value):
-        self._position = value
-
-    @property
-    def color(self):
-        return self._color
-
-    @color.setter
-    def color(self, value):
-        self._color = value
-
-    def __gt__(self, other):
-        return self.radius > other.radius
-
-    def __ge__(self, other):
-        return self.radius >= other.radius
-
-    def __lt__(self, other):
-        return self.radius < other.radius
-
-    def __le__(self, other):
-        return self.radius <= other.radius
-
-    def __add__(self, other):
-        if self >= other :
-            return Circle(self.color, self.position, self.radius + other.radius)
-        else:
-            return Circle(other.color, other.position, self.radius + other.radius)
-    def __sub__(self, other):
-        if self < other:
-            return Exception("First circle is less then seccond")
-        return Circle(self.color, self.position, self.radius - other.radius)
+    def update(self):
+        self.x += self.vx
+        self.y += self.vy
 
     def draw(self, screen):
-        pg.draw.circle(screen, self.color, self.position, self.radius)
+        pg.draw.circle(screen, (255,255,255), (self.x, self.y), 5)
 
-class Rectangle:
-    def __init__(self, color, position, rect):
-        self.position = position
-        self.color = color
-        self.rect = rect
+class Tank:
+    def __init__(self, x=0, y=0, angle=0, speed=0.1):
+        self.x = x
+        self.y = y
+        self.angle = angle
+        self.speed = speed
+        rad = math.radians(self.angle)
+        self.vx = math.sin(rad) * self.speed
+        self.vy = -math.cos(rad) * self.speed
 
-    @property
-    def rect(self):
-        return self._rect
-
-    @rect.setter
-    def rect(self, value):
-        self._rect = (max(value[0], 0), max(value[1], 0))
-
-    @property
-    def position(self):
-        return self._position
-
-    @position.setter
-    def position(self, value):
-        self._position = value
-
-    @property
-    def color(self):
-        return self._color
-
-    @color.setter
-    def color(self, value):
-        self._color = value
-
-    def __gt__(self, other):
-        return self.rect[0] * self.rect[1] > other.rect[0] * other.rect[1]
-
-    def __ge__(self, other):
-        return self.rect[0] * self.rect[1] >= other.rect[0] * other.rect[1]
-
-    def __lt__(self, other):
-        return self.rect[0] * self.rect[1] < other.rect[0] * other.rect[1]
-
-    def __le__(self, other):
-        return self.rect[0] * self.rect[1] <= other.rect[0] * other.rect[1]
-
-    def __add__(self, other):
-        if self >= other :
-            return Rectangle(self.color, self.position, (self.rect[0] + other.rect[0], self.rect[1] + other.rect[1]))
-        else:
-            return Rectangle(other.color, other.position, (self.rect[0] + other.rect[0], self.rect[1] + other.rect[1]))
-    def __sub__(self, other):
-        if self < other:
-            return Exception("First rectangle is less then seccond")
-        return Rectangle(self.color, self.position, (max(self.rect[0] - other.rect[0], 0), max(self.rect[1] - other.rect[1], 0)))
+    def update(self, keys):
+        if keys[pg.K_w]:
+            self.x += self.vx
+            self.y += self.vy
+        if keys[pg.K_s]:
+            self.x -= self.vx
+            self.y -= self.vy
+        if keys[pg.K_a]:
+            self.angle -= 0.1
+            rad = math.radians(self.angle)
+            self.vx = math.sin(rad) * self.speed
+            self.vy = -math.cos(rad) * self.speed
+        if keys[pg.K_d]:
+            self.angle += 0.1
+            rad = math.radians(self.angle)
+            self.vx = math.sin(rad) * self.speed
+            self.vy = -math.cos(rad) * self.speed
+        if keys[pg.K_SPACE]:
+            return self.shoot()
+        return False
 
     def draw(self, screen):
-        pg.draw.rect(screen, self.color, pg.Rect(
-            self.position[0], self.position[1], self.rect[0], self.rect[1]
-        ))
+        pg.draw.rect(screen, (125,125,125), pg.Rect(self.x - 20, self.y - 20, 40, 40))
 
-class Character:
-    def __init__(self, name, damage, evasion=0, armor=0, lifesteal=0., hp=100.):
-        self.name = name
-        self._hp = hp
-        self.armor = armor
-        self.damage = damage
-        self.evasion = evasion
-        self.lifesteal = lifesteal
-
-    def __str__(self):
-        return f"{self.name} - {self._hp} HP"
-
-    def __repr__(self):
-        return f"{self.name=} \t | {self._hp=} \t | {self.damage=} \t | {self.evasion=} \t | {self.armor=} \t | {self.lifesteal=}"
-
-    @property
-    def hp(self):
-        return self._hp
-
-    @hp.setter
-    def hp(self, value):
-        if value < 0:
-            self._hp = 0
-        else:
-            self._hp = round(value, 3)
-
-    def take_damage(self, damage):
-        if random.randint( 1, 100) < self.evasion:
-            return -1
-        else:
-            new_damage = damage - min((damage * (self.armor / 100)), damage)
-            self.hp -= new_damage
-            return new_damage
-
-    def attack(self, other):
-        if self.is_alive:
-            damage_modify = self.damage + self.damage * (random.randint(-20, 20) / 100)
-            responce = other.take_damage(damage_modify)
-            if responce != -1:
-                self.hp += (responce / 100) * self.lifesteal
-                return responce
-            else:
-                return -1
-        else:
-            return -2
-
-    @property
-    def is_alive(self):
-        return self.hp > 0
-
-class Berserk(Character):
-    def __init__(self, name, damage, evasion=0, armor=0, lifesteal=0., hp=100.):
-        Character.__init__(self, name, damage, evasion, armor, lifesteal, hp)
-        self._max_hp = self.hp
-
-    def attack(self, other):
-        if self.is_alive:
-            damage_modify = self.damage + self.damage * (random.randint(-20, 20) / 100) + self.damage * (self._max_hp - self.hp) / self._max_hp
-            responce = other.take_damage(damage_modify)
-            if responce != -1:
-                self.hp += (responce / 100) * self.lifesteal
-                return responce
-            else:
-                return -1
-        else:
-            return -2
+    def shoot(self):
+        return Bullet(self.x, self.y, self.angle, 0.2)
 
 
 
-player = Character("Unit 1", 13, 10, 10, 40)
-player2 = Berserk("Unit 2", 13,  0,7, 0)
+WINDOW_SIZE = (800, 600)
 
-while player.is_alive and player2.is_alive:
-    print(player.__repr__())
-    print(player2.__repr__())
+def run_game():
+    pg.init()
+    screen = pg.display.set_mode(WINDOW_SIZE)
+    pg.display.set_caption("Game")
+    tank = Tank(200, 200, 30, 0.1)
+    bullet = Bullet(0, 0, speed=0.15, angle=0)
+    while True:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                exit()
 
-    attack = player.attack(player2)
+        keys = pg.key.get_pressed()
+        updated = tank.update(keys)
+        if updated != False:
+            bullet = updated
+        screen.fill((0,0,0))
+        bullet.update()
+        bullet.draw(screen)
+        tank.draw(screen)
+        pg.display.update()
 
-    if attack == -1:
-        print(f"{player2.name} evaded from attack {player.name}")
-    elif attack == -2:
-        print(player2)
-    else:
-        print(f"{player.name} attacks {player2.name} with {round(attack, 3)} damage")
-        print(player2)
-        # sleep(1)
-
-    attack = player2.attack(player)
-    if attack == -1:
-        print(f"{player.name} evaded from attack {player2.name} ")
-    elif attack == -2:
-        print(player)
-    else:
-        print(f"{player2.name} attacks {player.name} with {round(attack, 3)} damage")
-        print(player)
-        # sleep(1)
-
-    print("\n")
-    #sleep(1)
-    if not player.is_alive:
-        print(f"{player2.name} - WIN!")
-    if not player2.is_alive:
-        print(f"{player.name} - WIN!")
+if __name__ == "__main__":
+    run_game()
