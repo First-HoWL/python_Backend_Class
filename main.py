@@ -68,30 +68,11 @@ class Frog_Tank(Tank):
         self.jump_Cooldown = 0
 
     def update(self, keys, game_object):
-        if keys[pg.K_w]:
-            self.x += self.vx
-            self.y += self.vy
-        if keys[pg.K_s]:
-            self.x -= self.vx
-            self.y -= self.vy
-        if keys[pg.K_a]:
-            self.angle -= 0.1
-            rad = math.radians(self.angle)
-            self.vx = math.sin(rad) * self.speed
-            self.vy = -math.cos(rad) * self.speed
-        if keys[pg.K_d]:
-            self.angle += 0.1
-            rad = math.radians(self.angle)
-            self.vx = math.sin(rad) * self.speed
-            self.vy = -math.cos(rad) * self.speed
-        if keys[pg.K_SPACE] and self.cooldown == 0:
-            game_object.append(self.shoot())
-            self.cooldown = 5
+        Tank.update(self, keys, game_object)
         if keys[pg.K_x] and self.jump_Cooldown == 0:
             self.x += self.vx * 500
             self.y += self.vy * 500
             self.jump_Cooldown = 5
-        self.cooldown = max(0, self.cooldown - 0.07)
         self.jump_Cooldown = max(0, self.jump_Cooldown - 0.005)
 
 
