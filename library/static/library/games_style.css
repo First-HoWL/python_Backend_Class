@@ -1,0 +1,33 @@
+a{
+    text-decoration: none !important;
+    color: black;
+    padding: 8px;
+}
+nav{
+    background-color: lightgray;
+    padding: 10px;
+}
+body{
+    padding: 0;
+    margin: 0;
+}
+
+div.item{
+    border: 1px solid;
+    padding: 20px;
+    background: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+
+}
+aside > h3{
+    text-align: center;
+}
+aside > p{
+    margin: 0 0 0 0;
+}
+div.main{
+    display: flex;
+    justify-content: space-around;
+}

@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Miyadzaki Games</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'library/games_style.css' %}">
+</head>
+<body>
+<nav>
+    <a href="/">Main</a>
+    <a href="/games">Games</a>
+    <a href="/funfact">Fun fact</a>
+</nav>
+<div class="main">
+  <div class="item">
+    <img src="{% static 'library/img/Demon_Souls_Cover.jpg' %}" alt="Demon's Souls img">
+    <h3>Demon's Souls</h3>
+    <p>Demon's Souls is a 2009 action role-playing game</p>
+  </div>
+    <div class="item">
+    <img src="{% static 'library/img/Bloodborne_Cover_Wallpaper.jpg' %}" alt="Bloodborne img">
+    <h3>Bloodborne</h3>
+    <p>Bloodborne is a 2015 action role-playing game</p>
+  </div>
+    <div class="item">
+    <img src="{% static 'library/img/Sekiro_art.jpg' %}" alt="Sekiro: Shadows Die Twice img">
+    <h3>Sekiro: Shadows Die Twice</h3>
+    <p>Sekiro: Shadows Die Twice is a 2019 action-adventure game</p>
+  </div>
+    <div class="item">
+    <img src="{% static 'library/img/Elden_Ring_Box_art.jpg' %}" alt="Elden Ring img">
+    <h3>Elden Ring</h3>
+    <p>Elden Ring is a 2022 action role-playing game</p>
+  </div>
+
+</div>
+</body>
+</html>
