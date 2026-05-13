@@ -1,0 +1,30 @@
+{% extends "library/base.html"%}
+{% load static %}
+{% block title %}
+Projects
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="{% static 'library/projects_style.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% for project in projects %}
+<div class="block-of-project">
+    <img alt="{{ project.name }}">
+    <div class="block">
+        <div>
+            <span>{{project.name}}</span>
+            <span>{{ project.year }}</span>
+        </div>
+        <p>{{project.desc}}</p>
+        <div class="row">
+            {% for skill in project.skills %}
+            <span> {{skill}} </span>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

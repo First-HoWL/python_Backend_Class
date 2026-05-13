@@ -1,0 +1,18 @@
+div.main{
+    padding: 10px;
+
+}
+
+
+.beginer > span{
+color: blue;
+}
+.intermediate > span{
+color: orange;
+}
+.advanced > span{
+color: red;
+}
+.invalid > span{
+color: grey;
+}

@@ -1,0 +1,22 @@
+{% extends "library/base.html"%}
+{% load static %}
+{% block title %}
+Portfolio
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="{% static 'library/portfolio_style.css' %}">
+{% endblock %}
+
+{% block content %}
+<h2>Ященко Денис</h2>
+<p>Я — backend розробник, який пристрасно створює якісні backend проєкти з базами даних для інтуїтивно зрозумілих та візуально привабливих веб-сайтів. </p>
+
+<ul>
+    {% for skill in skills %}
+    <li class="{{skill.skill}}">{{skill.name}}: <span>{{skill.skill}}</span></li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}

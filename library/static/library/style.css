@@ -1,3 +1,20 @@
+a{
+    text-decoration: none !important;
+    color: black;
+    padding: 8px;
+}
+nav{
+    background-color: lightgray;
+    padding: 10px;
+}
 body{
-    color : orange;
+    padding: 0;
+    margin: 0;
+}
+div.left-side{
+    display: inline-block;
+    padding: 0 10px 0 10px;
+}
+div.left-side > p{
+    margin-top: 0;
 }

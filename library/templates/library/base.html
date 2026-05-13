@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
         {% block style %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'library/style.css' %}">
 </head>
 <body>
 <nav>
-    <a href="/">Main</a>
-    <a href="/games">Games</a>
-    <a href="/funfact">Fun fact</a>
+    <a href="{% url 'main' %}">Main</a>
+    <a href="{% url 'projects' %}">Projects</a>
+    <a href="{% url 'main' %}">Contacts</a>
 </nav>
 <div class="main">
     {% block content %}

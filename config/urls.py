@@ -20,7 +20,6 @@ from library import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('funfact/', views.get_funFact),
-    path('', views.get_Hidetaka_Miyazaki),
-    path('games/', views.get_games),
+    path('', views.get_portfolio_main, name="main"),
+    path('projects/', views.get_projects_main, name="projects"),
 ]

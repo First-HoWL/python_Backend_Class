@@ -3,13 +3,31 @@ from django.template import loader
 from django.http import HttpResponse
 # Create your views here.
 
-def get_funFact(request):
-    return render(request, 'library/funFact.html')
 
-def get_games(request):
-    return render(request, 'library/games.html')
+def get_portfolio_main(request):
 
-def get_Hidetaka_Miyazaki(request):
-    return render(request, 'library/Hidetaka_Miyazaki.html')
+    context = {
+        'skills': [
+            {"name": "C++", "skill": "intermediate",},
+            {"name": "ASP.NET", "skill": "intermediate",},
+            {"name": "JavaScript", "skill" : "advanced",},
+            {"name": "MySQL", "skill" : "intermediate",},
+            {"name": 'docker', "skill": "intermediate",},
+            {"name": 'python', "skill": "invalid",},
+        ]
+    }
+    return render(request, 'library/main.html', context)
 
+def get_projects_main(request):
+    context = {
+        'projects': [
+            {"name": "PixelRun", "desc": "PixelRun is a platformer game", "year": "2025", "skills":{
+                "C++", "SFML", "ASP.NET", "MySQL", "React", "JavaScript"
+            } },
+            {"name": "Tournaments", "desc": "Tournaments is a web-site for people who want to hold a tournament", "year": "2025", "skills":{
+                "ASP.NET", "MySQL", "React", "JavaScript"
+            } },
+        ]
+    }
+    return render(request, 'library/projects.html', context)
 
