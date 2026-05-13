@@ -1,20 +1,15 @@
+
+{% extends "library/base.html"%}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Miadzaki Babadzaki</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'library/funFact_style.css' %}">
-</head>
-<body>
-<nav>
-    <a href="/">Main</a>
-    <a href="/games">Games</a>
-    <a href="/funfact">Fun fact</a>
-</nav>
-<div class="main">
+{% block title %}
+Miadzaki Babadzaki
+{% endblock%}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'library/funFact_style.css' %}">
+{% endblock %}
+
+{% block content %}
 <h3>Fun fact</h3>
   <p>My friend, after spending 3 days trying to beat a boss, started calling Hidetaka Miyazaki “Miadzaki Babadzaki” and even put his photo as his Steam avatar. </p>
-</div>
-</body>
-</html>
+{% endblock %}

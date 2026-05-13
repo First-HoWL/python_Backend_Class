@@ -1,19 +1,16 @@
+{% extends "library/base.html"%}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Miyadzaki Games</title>
+{% block title %}
+Miyadzaki Games
+{% endblock%}
+
+{% block style %}
   <link rel="stylesheet" type="text/css" href="{% static 'library/games_style.css' %}">
-</head>
-<body>
-<nav>
-    <a href="/">Main</a>
-    <a href="/games">Games</a>
-    <a href="/funfact">Fun fact</a>
-</nav>
-<div class="main">
-  <div class="item">
+{% endblock %}
+
+{% block content %}
+
+<div class="item">
     <img src="{% static 'library/img/Demon_Souls_Cover.jpg' %}" alt="Demon's Souls img">
     <h3>Demon's Souls</h3>
     <p>Demon's Souls is a 2009 action role-playing game</p>
@@ -34,6 +31,4 @@
     <p>Elden Ring is a 2022 action role-playing game</p>
   </div>
 
-</div>
-</body>
-</html>
+{% endblock %}
