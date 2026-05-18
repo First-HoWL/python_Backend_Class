@@ -23,4 +23,8 @@ urlpatterns = [
     path('', views.get_portfolio_main, name="main"),
     path('projects/', views.get_projects_main, name="projects"),
     path('contacts/', views.get_contacts_main, name="contacts"),
+    path('fibonacci/', views.get_fibonacci, name="fibonacci"),
+    path('fibonacci/<int:num>/', views.get_fibonacci, name="fibonacci"),
+    path('catalog', views.get_catalog, name="catalog"),
+    path('catalog/<int:id>', views.get_product_page, name="catalog"),
 ]

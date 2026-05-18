@@ -1,0 +1,16 @@
+div.main{
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+div.element{
+    margin: 10px;
+    cursor: pointer;
+    width: 300px;
+    background-color: lightgray;
+    padding-bottom: 10px;
+    border-radius: 0 0 10px 10px;
+}
+div.in-element{
+    padding: 10px;
+}
