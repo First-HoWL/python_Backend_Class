@@ -31,3 +31,10 @@ def get_projects_main(request):
     }
     return render(request, 'library/projects.html', context)
 
+def get_contacts_main(request):
+    context = {
+        'email' : "example@example.com",
+        'phone' : "0951234567"
+    }
+    return render(request, 'library/contacts.html', context)
+
