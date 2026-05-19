@@ -18,13 +18,14 @@ from django.contrib import admin
 from django.urls import path
 from library import views
 
+handler404 = "library.views.get404"
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.get_portfolio_main, name="main"),
-    path('projects/', views.get_projects_main, name="projects"),
-    path('contacts/', views.get_contacts_main, name="contacts"),
-    path('fibonacci/', views.get_fibonacci, name="fibonacci"),
-    path('fibonacci/<int:num>/', views.get_fibonacci, name="fibonacci"),
-    path('catalog', views.get_catalog, name="catalog"),
-    path('catalog/<int:id>', views.get_product_page, name="catalog"),
+    path('', views.get_main_page, name="main"),
+    path('schedule/', views.get_week_schedule, name="schedule"),
+    path('today/', views.get_today_schedule, name="today"),
+    path('day/<str:day>', views.get_day, name="day"),
+    path('teachers/', views.get_teachers, name="teachers")
+    
 ]

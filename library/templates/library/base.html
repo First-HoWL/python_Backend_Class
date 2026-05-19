@@ -1,24 +1,31 @@
-
-<!DOCTYPE html>
 {% load static %}
-<html lang="en">
+<!doctype html>
+<html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
-        {% block style %}{% endblock %}
-    <link rel="stylesheet" type="text/css" href="{% static 'library/style.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}INDEX{% endblock %} — SCHOOL SHEDULE</title>
+  <link rel="stylesheet" href="{% static 'library/Schedule_style.css' %}">
 </head>
 <body>
-<nav>
-    <a href="{% url 'main' %}">Main</a>
-    <a href="{% url 'projects' %}">Projects</a>
-    <a href="{% url 'contacts' %}">Contacts</a>
-    <a href="{% url 'fibonacci' %}">Fibonacci</a>
-    <a href="{% url 'catalog' %}">Catalog</a>
-</nav>
-<div class="main">
-    {% block content %}
-    {% endblock %}
-</div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <nav class="main-nav">
+        
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-copy">Group 2026-A Schedule © 2025</span>
+    </div>
+  </footer>
+
 </body>
 </html>

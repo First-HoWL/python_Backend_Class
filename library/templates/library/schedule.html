@@ -1,0 +1,39 @@
+{% extends 'library/base.html' %}
+{% block title %}STUDENT SCHEDULE{% endblock %}
+{% block nav_contacts %}active{% endblock %}
+
+{% block content %}
+<section class="section contacts-section">
+  <div class="schedule-container">
+    <h1>Розклад на тиждень</h1>
+  </div>
+  <div style="text-align: center; margin-bottom: 20px; margin-top: 20px;">
+    <h1>GROUP 2026-A</h1>
+    <h1>WEEK{% if schedule.0 %} {{ schedule.0.week }} {% endif %}</h1>
+  </div>
+  <div>
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          {% for day in schedule.days %}
+          {% if day == today %}
+          <th style="padding: 10px; border: 1px solid #ccc; background-color: darkcyan; font-weight: bold;">{{ day }}</th>
+          {% else %}
+          <th style="padding: 10px; border: 1px solid #ccc; background-color: #e0e0e0; font-weight: bold; color: #000;">{{ day }}</th>
+          {% endif %}
+          {% endfor %}
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="schedule-container">
+    
+    <!--
+    
+        Here we need a schedule
+    
+    -->
+
+  </div>
+</section>
+{% endblock %}
