@@ -4,36 +4,180 @@
 
 {% block content %}
 <section class="section contacts-section">
-  <div class="schedule-container">
-    <h1>Розклад на тиждень</h1>
+  <div class="page-header">
+    <span class="page-eyebrow">TIMETABLE</span>
+    <h1 class="page-title">Weekly Schedule</h1>
   </div>
-  <div style="text-align: center; margin-bottom: 20px; margin-top: 20px;">
-    <h1>GROUP 2026-A</h1>
-    <h1>WEEK{% if schedule.0 %} {{ schedule.0.week }} {% endif %}</h1>
+
+  <div class="schedule-info">
+    <span class="schedule-group">GROUP 2026-A</span>
   </div>
-  <div>
-    <table class="schedule-table">
+
+  <div class="week-schedule-wrapper">
+    <table class="week-schedule-table">
       <thead>
         <tr>
-          {% for day in schedule.days %}
-          {% if day == today %}
-          <th style="padding: 10px; border: 1px solid #ccc; background-color: darkcyan; font-weight: bold;">{{ day }}</th>
-          {% else %}
-          <th style="padding: 10px; border: 1px solid #ccc; background-color: #e0e0e0; font-weight: bold; color: #000;">{{ day }}</th>
-          {% endif %}
-          {% endfor %}
+          <th class="day-header{% if 'Monday' == today %} day-header--today{% endif %}">Monday</th>
+          <th class="day-header{% if 'Tuesday' == today %} day-header--today{% endif %}">Tuesday</th>
+          <th class="day-header{% if 'Wednesday' == today %} day-header--today{% endif %}">Wednesday</th>
+          <th class="day-header{% if 'Thursday' == today %} day-header--today{% endif %}">Thursday</th>
+          <th class="day-header{% if 'Friday' == today %} day-header--today{% endif %}">Friday</th>
+          <th class="day-header{% if 'Saturday' == today %} day-header--today{% endif %}">Saturday</th>
+          <th class="day-header{% if 'Sunday' == today %} day-header--today{% endif %}">Sunday</th>
         </tr>
       </thead>
+      <tbody>
+        <tr class="lesson-row">
+          <td class="day-cell">
+            {% if schedule.days.Monday %}
+              <div class="lessons-list">
+                {% for lesson in schedule.days.Monday %}
+                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
+                    <div class="lesson-time">{{ lesson.time }}</div>
+                    <div class="lesson-subject">{{ lesson.subject }}</div>
+                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
+                    {% if lesson.notes %}
+                      <div class="lesson-notes">{{ lesson.notes }}</div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="no-lessons">No classes</div>
+            {% endif %}
+          </td>
+          <td class="day-cell">
+            {% if schedule.days.Tuesday %}
+              <div class="lessons-list">
+                {% for lesson in schedule.days.Tuesday %}
+                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
+                    <div class="lesson-time">{{ lesson.time }}</div>
+                    <div class="lesson-subject">{{ lesson.subject }}</div>
+                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
+                    {% if lesson.notes %}
+                      <div class="lesson-notes">{{ lesson.notes }}</div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="no-lessons">No classes</div>
+            {% endif %}
+          </td>
+          <td class="day-cell">
+            {% if schedule.days.Wednesday %}
+              <div class="lessons-list">
+                {% for lesson in schedule.days.Wednesday %}
+                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
+                    <div class="lesson-time">{{ lesson.time }}</div>
+                    <div class="lesson-subject">{{ lesson.subject }}</div>
+                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
+                    {% if lesson.notes %}
+                      <div class="lesson-notes">{{ lesson.notes }}</div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="no-lessons">No classes</div>
+            {% endif %}
+          </td>
+          <td class="day-cell">
+            {% if schedule.days.Thursday %}
+              <div class="lessons-list">
+                {% for lesson in schedule.days.Thursday %}
+                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
+                    <div class="lesson-time">{{ lesson.time }}</div>
+                    <div class="lesson-subject">{{ lesson.subject }}</div>
+                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
+                    {% if lesson.notes %}
+                      <div class="lesson-notes">{{ lesson.notes }}</div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="no-lessons">No classes</div>
+            {% endif %}
+          </td>
+          <td class="day-cell">
+            {% if schedule.days.Friday %}
+              <div class="lessons-list">
+                {% for lesson in schedule.days.Friday %}
+                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
+                    <div class="lesson-time">{{ lesson.time }}</div>
+                    <div class="lesson-subject">{{ lesson.subject }}</div>
+                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
+                    {% if lesson.notes %}
+                      <div class="lesson-notes">{{ lesson.notes }}</div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="no-lessons">No classes</div>
+            {% endif %}
+          </td>
+          <td class="day-cell">
+            {% if schedule.days.Saturday %}
+              <div class="lessons-list">
+                {% for lesson in schedule.days.Saturday %}
+                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
+                    <div class="lesson-time">{{ lesson.time }}</div>
+                    <div class="lesson-subject">{{ lesson.subject }}</div>
+                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
+                    {% if lesson.notes %}
+                      <div class="lesson-notes">{{ lesson.notes }}</div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="no-lessons">No classes</div>
+            {% endif %}
+          </td>
+          <td class="day-cell">
+            {% if schedule.days.Sunday %}
+              <div class="lessons-list">
+                {% for lesson in schedule.days.Sunday %}
+                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
+                    <div class="lesson-time">{{ lesson.time }}</div>
+                    <div class="lesson-subject">{{ lesson.subject }}</div>
+                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
+                    {% if lesson.notes %}
+                      <div class="lesson-notes">{{ lesson.notes }}</div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="no-lessons">No classes</div>
+            {% endif %}
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
-  <div class="schedule-container">
-    
-    <!--
-    
-        Here we need a schedule
-    
-    -->
 
-  </div>
+  <section class="section skills-section" style="padding-top: 32px; margin-top: 40px; border-top: 1px solid var(--border);">
+    <h2 class="section-title">Quick Access</h2>
+    <div class="skills-grid" style="margin-top: 28px;">
+      <a href="/" class="skill-card" style="text-decoration:none">
+        <div class="skill-icon-wrap"><img class="skill-img" src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="Home"></div>
+        <div class="skill-info">
+          <span class="skill-name">Home</span>
+          <p style="font-size:.85rem;color:var(--text-muted);margin-top:6px">Return to main page</p>
+        </div>
+      </a>
+
+      <a href="/teachers/" class="skill-card" style="text-decoration:none">
+        <div class="skill-icon-wrap"><img class="skill-img" src="https://cdn-icons-png.flaticon.com/512/475/475831.png" alt="Teachers"></div>
+        <div class="skill-info">
+          <span class="skill-name">Find Teachers</span>
+          <p style="font-size:.85rem;color:var(--text-muted);margin-top:6px">Browse all teachers and subjects</p>
+        </div>
+      </a>
+    </div>
+  </section>
 </section>
 {% endblock %}

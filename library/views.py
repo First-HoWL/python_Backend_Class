@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
 from datetime import datetime
+
+from .admin import *
 # Create your views here.
 
 schedule_data = {
@@ -251,6 +253,8 @@ def get_main_page(request):
 
 
 def get_week_schedule(request):
+    lessons = Lessons.objects.all()
+    print(lessons)
     context = {
         "today": today,
         "schedule": schedule_data
@@ -284,10 +288,30 @@ def get_day(request, day):
         return render(request, 'library/404.html')
 
 def get_teachers(request):
+    teachers = Teacher.objects.all()
+    subjects = Subject.objects.all()
+    subjectToTeacher = SubjectToTeacher.objects.all()
     context = {
-        "teachers": teachers_data
+        "teachers": []
     }
-    return render(request, 'library/404.html', context)
+    for teacher in teachers:
+        subjectsTeachers = subjectToTeacher.filter(TeacherId=teacher.id)
+        curr_subjects = []
+        for sub_id in subjectsTeachers:
+            curr_subjects.append({
+                "id": subjects.filter(id=sub_id.SubjectId)[0].id,
+                "name": subjects.filter(id=sub_id.SubjectId)[0].name
+                })
+        context["teachers"].append({
+            "name" : teacher.name,
+            "surname" : teacher.surname,
+            "avatar": teacher.avatar,
+            "classes_count": teacher.classes_count,
+            "subjects": curr_subjects
+        })
+
+    
+    return render(request, 'library/teachers.html', context)
 
 def get404(request, exception):
     return render(request, 'library/404.html')
