@@ -1,0 +1,70 @@
+{% extends 'library/base.html' %}
+{% block title %}{{ current_day | default:today }} — Schedule{% endblock %}
+{% block nav_contacts %}active{% endblock %}
+
+{% block content %}
+<section class="section contacts-section">
+  <div class="page-header">
+    <span class="page-eyebrow">TIMETABLE</span>
+    <h1 class="page-title">{{ current_day | default:today }}</h1>
+    <p style="margin-top: 10px; color: var(--text-muted); font-size: 0.9rem;">
+      Group <span style="color: var(--accent); font-weight: 600;">{{ schedule.group }}</span>
+    </p>
+  </div>
+
+  <div class="day-schedule-wrapper">
+    {% if schedule.day %}
+      <div class="day-schedule-list">
+        {% for lesson in schedule.day %}
+          <div class="day-lesson-card {% if lesson.status == 'cancelled' %}lesson-cancelled{% endif %}">
+
+            <div class="day-lesson-header">
+              <div>
+                <div class="day-lesson-time">{{ lesson.time }}</div>
+                <div class="day-lesson-number">Lesson {{ lesson.lesson_number }}</div>
+              </div>
+              <div class="day-lesson-status">
+                {% if lesson.status == 'cancelled' %}
+                  <span class="status-badge status-cancelled">Cancelled</span>
+                {% else %}
+                  <span class="status-badge status-active">Active</span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="day-lesson-content">
+              <p class="day-lesson-subject">{{ lesson.subject }}</p>
+
+              <div class="day-lesson-teacher">
+                <span class="label">Teacher</span>
+                <span class="value">{{ lesson.teacher }}</span>
+              </div>
+
+              {% if lesson.notes %}
+                <div class="day-lesson-notes">
+                  <span class="label">Notes</span>
+                  <span class="value">{{ lesson.notes }}</span>
+                </div>
+              {% endif %}
+            </div>
+
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <p style="color: var(--text-muted); font-size: 1rem;">No classes scheduled for this day.</p>
+      </div>
+    {% endif %}
+  </div>
+  <div class="day-nav">
+    {% for day in days_of_week %}
+      <a href="/schedule/{{ day }}/"
+         class="day-nav-btn {% if day == current_day or day == today and not current_day %}day-nav-btn--active{% endif %}">
+        {{ day | slice:":3" | upper }}
+      </a>
+    {% endfor %}
+  </div>
+
+</section>
+{% endblock %}

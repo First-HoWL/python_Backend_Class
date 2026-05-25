@@ -246,6 +246,14 @@ days_of_week = [
 ]
 today = "Monday" #days_of_week[datetime.today().weekday()]
 
+lesson_time = {
+    "1" : "08:30",
+    "2" : "11:00",
+    "3" : "12:30",
+    "4" : "14:00"
+}
+
+
 
 def get_main_page(request):
     context = {
@@ -255,37 +263,105 @@ def get_main_page(request):
 
 
 def get_week_schedule(request):
+    teachers = Teacher.objects.all()
+    subjects = Subject.objects.all()
     lessons = Lessons.objects.all()
-    print(lessons)
+    days = {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+        "Saturday": [],
+        "Sunday": []
+    }
+
+    for lesson in lessons:
+        days[lesson.day].append({
+            "time": lesson_time[lesson.time], 
+            "subject": subjects.filter(id = lesson.SubjectId).first().name,
+            "teacher": teachers.filter(id = lesson.TeacherId).first().name,
+            "notes": lesson.notes,
+            "status": lesson.status
+        })
+
+    # print(lessons)
     context = {
         "today": today,
-        "schedule": schedule_data
+        "schedule": {
+            "days": days
+            }
     }
     return render(request, 'library/schedule.html', context)
 
 
 
 def get_today_schedule(request):
+    teachers = Teacher.objects.all()
+    subjects = Subject.objects.all()
+    lessons = Lessons.objects.all()
+    days = {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+        "Saturday": [],
+        "Sunday": []
+    }
+
+    for lesson in lessons:
+        days[lesson.day].append({
+            "time": lesson_time[lesson.time], 
+            "subject": subjects.filter(id = lesson.SubjectId).first().name,
+            "teacher": teachers.filter(id = lesson.TeacherId).first().name,
+            "notes": lesson.notes,
+            "status": lesson.status
+        })
+
     context = {
         "today": today,
         "schedule": {
-            "group": schedule_data["group"],
-            "day": schedule_data["days"][today]
+            "day": days[today]
             }
     }
-    return render(request, 'library/week_schedule.html', context) # here we need a new day(today) of schedule page
+    return render(request, 'library/schedule_one_day.html', context) 
 
 def get_day(request, day):
+
+    teachers = Teacher.objects.all()
+    subjects = Subject.objects.all()
+    lessons = Lessons.objects.all()
+    days = {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+        "Saturday": [],
+        "Sunday": []
+    }
+
+    for lesson in lessons:
+        days[lesson.day].append({
+            "time": lesson_time[lesson.time], 
+            "subject": subjects.filter(id = lesson.SubjectId).first().name,
+            "teacher": teachers.filter(id = lesson.TeacherId).first().name,
+            "notes": lesson.notes,
+            "status": lesson.status
+        })
+
+
+
     if day in days_of_week:
         context = {
             "today": today,
             "current_day": day,
             "schedule": {
-                "group": schedule_data["group"],
-                "day": schedule_data["days"][day]
+                "day": days[day]
                 }
         }
-        return render(request, 'library/week_schedule.html', context) # here we need a new day of schedule page
+        return render(request, 'library/schedule_one_day.html', context) 
     else:
         return render(request, 'library/404.html')
 

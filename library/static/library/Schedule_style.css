@@ -998,4 +998,34 @@ a.contact-value:hover { color: var(--accent); opacity: 1; }
   }
 }
 
+.day-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 24px;
+}
 
+.day-nav-btn {
+  padding: 8px 18px;
+  border-radius: var(--radius);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+}
+
+.day-nav-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(0, 217, 163, 0.1);
+}
+
+.day-nav-btn--active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}

@@ -1,8 +1,15 @@
 from django import forms
 from .models import *
 
+def check_banwords(value):
+    banwords = ["ban"]
+    for banword in banwords:
+        if banword in value:
+            raise forms.ValidationError("Banwords in the text!!!!")
 
 class PostForm(forms.ModelForm):
+    name = forms.CharField(validators=[check_banwords])
+    surname = forms.CharField(validators=[check_banwords])
     class Meta:
         model = Teacher
         fields = ['name', 'surname', 'avatar', 'classes_count']
@@ -27,4 +34,5 @@ class PostForm(forms.ModelForm):
                 "required" : "Can`t be null"
             },
         }
+    
     
