@@ -1,0 +1,26 @@
+{% extends 'library/base.html' %}
+{% block title %}STUDENT SCHEDULE{% endblock %}
+{% block nav_contacts %}active{% endblock %}
+
+{% block content %}
+<section class="section contacts-section">
+    <div class="page-header">
+        <span class="page-eyebrow">FACULTY</span>
+        <h1 class="page-title">Add Teacher</h1>
+    </div>
+    <div class="add-teacher-wrapper">
+        <form method="post" class="teacher-form">
+            {% csrf_token %}
+            {{ form.as_div }}
+            <div class="form-actions">
+                <div class="control">
+                    <button class="btn btn-ghost">Add Teacher</button>
+                </div>
+                <div class="control">
+                    <a href="{% url 'teachers' %}" class="btn btn-primary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

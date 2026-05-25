@@ -26,6 +26,7 @@ urlpatterns = [
     path('schedule/', views.get_week_schedule, name="schedule"),
     path('today/', views.get_today_schedule, name="today"),
     path('day/<str:day>', views.get_day, name="day"),
-    path('teachers/', views.get_teachers, name="teachers")
+    path('teachers/', views.get_teachers, name="teachers"),
+    path('teachers/add', views.teachers_add, name="add_teacher")
     
 ]

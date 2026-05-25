@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
 from datetime import datetime
+from django.shortcuts import redirect
 
+from .forms import *
 from .admin import *
 # Create your views here.
 
@@ -312,6 +314,17 @@ def get_teachers(request):
 
     
     return render(request, 'library/teachers.html', context)
+
+def teachers_add(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = PostForm()
+    
+    return render(request, "library/add_teacher.html", {'form': form})
 
 def get404(request, exception):
     return render(request, 'library/404.html')
