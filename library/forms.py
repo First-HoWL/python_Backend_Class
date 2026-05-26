@@ -35,4 +35,16 @@ class PostForm(forms.ModelForm):
             },
         }
     
-    
+
+class deposit_calculator(forms.Form):
+    count = forms.IntegerField(required=True)
+    term = forms.IntegerField(
+        initial=3,
+        widget=forms.NumberInput(attrs={
+            'type': 'range',
+            'step': '1',
+            'min': '3',
+            'max': '24'
+        })
+    )
+    is_add_percents = forms.BooleanField(required=False, initial=False, label='Reinvest percents')

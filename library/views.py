@@ -8,233 +8,6 @@ from .forms import *
 from .admin import *
 # Create your views here.
 
-schedule_data = {
-    "group": "2024-A",
-    "days": {
-        "Monday": [
-            {
-                "lesson_number": 1,
-                "time": "08:30",
-                "subject": "Physics",
-                "teacher": "Class Lenning",
-                "notes": "Class lenning ...",
-                "status": "active"
-            },
-            {
-                "lesson_number": 2,
-                "time": "10:15",
-                "subject": "Math",
-                "teacher": "Graycleded",
-                "notes": "Cancelled lesson",
-                "status": "cancelled"
-            },
-            {
-                "lesson_number": 3,
-                "time": "11:00",
-                "subject": "Physics",
-                "teacher": "Class Learning",
-                "notes": "Class learning ...",
-                "status": "active"
-            },
-            {
-                "lesson_number": 4,
-                "time": "13:15",
-                "subject": "Physics",
-                "teacher": "Today!",
-                "notes": "Regular lesson",
-                "status": "active"
-            }
-        ],
-        "Tuesday": [
-            {
-                "lesson_number": 1,
-                "time": "08:30",
-                "subject": "Physics",
-                "teacher": "Emmentest",
-                "notes": "Physics class",
-                "status": "active"
-            },
-            {
-                "lesson_number": 2,
-                "time": "10:15",
-                "subject": "History",
-                "teacher": "Foday",
-                "notes": "History lesson",
-                "status": "active"
-            },
-            {
-                "lesson_number": 3,
-                "time": "11:00",
-                "subject": "History",
-                "teacher": "Today",
-                "notes": "History lesson",
-                "status": "active"
-            },
-            {
-                "lesson_number": 4,
-                "time": "13:15",
-                "subject": "History",
-                "teacher": "Class Irmail",
-                "notes": "Regular lesson",
-                "status": "active"
-            }
-        ],
-        "Wednesday": [
-            {
-                "lesson_number": 1,
-                "time": "08:30",
-                "subject": "Physics",
-                "teacher": "Clads Karning",
-                "notes": "Physics class",
-                "status": "active"
-            },
-            {
-                "lesson_number": 2,
-                "time": "10:15",
-                "subject": "Wednesday",
-                "teacher": "Made Karning",
-                "notes": "Special lesson",
-                "status": "active"
-            },
-            {
-                "lesson_number": 3,
-                "time": "11:00",
-                "subject": "Wednesday",
-                "teacher": "Made Lerning",
-                "notes": "Regular lesson",
-                "status": "active"
-            },
-            {
-                "lesson_number": 4,
-                "time": "13:15",
-                "subject": "History",
-                "teacher": "Class Irmail",
-                "notes": "History class",
-                "status": "active"
-            }
-        ],
-        "Thursday": [
-            {
-                "lesson_number": 1,
-                "time": "08:30",
-                "subject": "Math",
-                "teacher": "Emntorntest",
-                "notes": "Math lesson",
-                "status": "active"
-            },
-            {
-                "lesson_number": 2,
-                "time": "10:15",
-                "subject": "Math",
-                "teacher": "Grads Karning",
-                "notes": "Math class",
-                "status": "active"
-            },
-            {
-                "lesson_number": 3,
-                "time": "11:00",
-                "subject": "Physics",
-                "teacher": "Crade Learning",
-                "notes": "Physics lesson",
-                "status": "active"
-            },
-            {
-                "lesson_number": 4,
-                "time": "13:15",
-                "subject": "Physics",
-                "teacher": "Fronicentent",
-                "notes": "Physics class",
-                "status": "active"
-            }
-        ],
-        "Friday": [
-            {
-                "lesson_number": 1,
-                "time": "08:30",
-                "subject": "Physics",
-                "teacher": "Class Karning",
-                "notes": "Physics lesson",
-                "status": "active"
-            },
-            {
-                "lesson_number": 2,
-                "time": "10:15",
-                "subject": "History",
-                "teacher": "Class Karning",
-                "notes": "History class",
-                "status": "active"
-            },
-            {
-                "lesson_number": 3,
-                "time": "11:00",
-                "subject": "Physics",
-                "teacher": "Full Espice",
-                "notes": "Physics lesson",
-                "status": "active"
-            },
-            {
-                "lesson_number": 4,
-                "time": "13:15",
-                "subject": "History",
-                "teacher": "Class Irmail",
-                "notes": "History lesson",
-                "status": "active"
-            }
-        ],
-        "Saturday": [],
-        "Sunday": [],
-    }
-}
-
-teachers_data = [
-    {
-        "id": 1,
-        "name": "Dr. Smith",
-        "avatar": "teacher_1.png",
-        "subjects": [
-            "Physics I",
-            "Mechanics"
-        ],
-        "classes_count": 4
-    },
-
-    {
-        "id": 2,
-        "name": "Dr. SI. Food",
-        "avatar": "teacher_2.png",
-        "subjects": [
-            "Physics I",
-            "Mechanics",
-            "History",
-            "Crads"
-        ],
-        "classes_count": 3
-    },
-
-    {
-        "id": 3,
-        "name": "Dr. Smith",
-        "avatar": "teacher_3.png",
-        "subjects": [
-            "Physics I",
-            "Math (Cancellationtest)"
-        ],
-        "classes_count": 1
-    },
-
-    {
-        "id": 4,
-        "name": "Dr. Hashow",
-        "avatar": "teacher_4.png",
-        "subjects": [
-            "Physics I",
-            "Mechanics",
-            "Math (Canceled)"
-        ],
-        "classes_count": 1
-    }
-]
-
 days_of_week = [
     "Monday",
     "Tuesday",
@@ -244,7 +17,7 @@ days_of_week = [
     "Saturday",
     "Sunday"
 ]
-today = "Monday" #days_of_week[datetime.today().weekday()]
+today = days_of_week[datetime.today().weekday()]
 
 lesson_time = {
     "1" : "08:30",
@@ -401,6 +174,69 @@ def teachers_add(request):
         form = PostForm()
     
     return render(request, "library/add_teacher.html", {'form': form})
+
+percents_per_month = {
+    "3": 8.,
+    "4": 8.4,
+    "5": 8.5,
+    "6": 8.8,
+    "7": 9.1,
+    "8": 9.4,
+    "9": 9.8,
+    "10": 10.2,
+    "11": 10.6,
+    "12": 11.,
+    "13": 11.,
+    "14": 11.,
+    "15": 11.,
+    "16": 11.,
+    "17": 11.,
+    "18": 11.,
+    "19": 11.,
+    "20": 11.,
+    "21": 11.,
+    "22": 11.,
+    "23": 11.,
+    "24": 11.,
+}
+
+def deposit(request):
+    if request.method == 'POST':
+        form = deposit_calculator(request.POST)
+        if form.is_valid():
+            money = max(float(form.data['count']), 0)
+            term = min(int(form.data['term']), 24)
+            percents = percents_per_month[str(term)]
+            
+            final_money = money
+
+            if form.data.__contains__('is_add_percents'):
+                final_money = round(money * ((1 + (percents / 1200)) **  term), 2)
+            else: 
+                final_money = round(money * ((1 + (percents / 1200) *  term) ), 2)
+                
+
+            
+            tax = round((final_money - money) * 0.23, 2)
+
+            final_money_with_tax = round(final_money - tax, 2)  
+
+            context = {
+                'form': form, 
+                'request': {
+                    "start_money": money,
+                    "final_money_without_tax" : final_money,
+                    "money": final_money_with_tax,
+                    "percent" : percents,
+                    "tax" : tax
+                    }
+                }
+            return render(request, "library/deposit.html",context )
+    else:
+        form = deposit_calculator()
+
+    return render(request, "library/deposit.html", {'form': form})
+
 
 def get404(request, exception):
     return render(request, 'library/404.html')

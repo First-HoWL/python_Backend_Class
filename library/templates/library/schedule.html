@@ -17,13 +17,13 @@
     <table class="week-schedule-table">
       <thead>
         <tr>
-          <th class="day-header{% if 'Monday' == today %} day-header--today{% endif %}">Monday</th>
-          <th class="day-header{% if 'Tuesday' == today %} day-header--today{% endif %}">Tuesday</th>
-          <th class="day-header{% if 'Wednesday' == today %} day-header--today{% endif %}">Wednesday</th>
-          <th class="day-header{% if 'Thursday' == today %} day-header--today{% endif %}">Thursday</th>
-          <th class="day-header{% if 'Friday' == today %} day-header--today{% endif %}">Friday</th>
-          <th class="day-header{% if 'Saturday' == today %} day-header--today{% endif %}">Saturday</th>
-          <th class="day-header{% if 'Sunday' == today %} day-header--today{% endif %}">Sunday</th>
+          <th class="day-header{% if 'Monday' == today %} day-header--today{% endif %}"><a href="{% url 'day' 'Monday' %}">Monday</a></th>
+          <a href="{% url 'day' 'Tuesday' %}"><th class="day-header{% if 'Tuesday' == today %} day-header--today{% endif %}">Tuesday</th></a>
+          <a href="{% url 'day' 'Wednesday' %}"><th class="day-header{% if 'Wednesday' == today %} day-header--today{% endif %}">Wednesday</th></a>
+          <a href="{% url 'day' 'Thursday' %}"><th class="day-header{% if 'Thursday' == today %} day-header--today{% endif %}">Thursday</th></a>
+          <a href="{% url 'day' 'Friday' %}"><th class="day-header{% if 'Friday' == today %} day-header--today{% endif %}">Friday</th></a>
+          <a href="{% url 'day' 'Saturday' %}"><th class="day-header{% if 'Saturday' == today %} day-header--today{% endif %}">Saturday</th></a>
+          <a href="{% url 'day' 'Sunday' %}"><th class="day-header{% if 'Sunday' == today %} day-header--today{% endif %}">Sunday</th></a>
         </tr>
       </thead>
       <tbody>
