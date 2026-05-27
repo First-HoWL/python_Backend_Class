@@ -12,9 +12,9 @@
   <header class="site-header">
     <div class="header-inner">
       <nav class="main-nav">
-        <a href="/" class="nav-link">Home</a>
-        <a href="{% url 'schedule' %}" class="nav-link">Schedule</a>
-        <a href="{% url 'teachers' %}" class="nav-link">Teachers</a>
+        <a href="/" class="nav-link{% block nav_home %}{% endblock %}">Home</a>
+        <a href="{% url 'schedule' %}" class="nav-link{% block nav_schedule %}{% endblock %}">Schedule</a>
+        <a href="{% url 'teachers' %}" class="nav-link{% block nav_teachers %}{% endblock %}">Teachers</a>
       </nav>
     </div>
   </header>

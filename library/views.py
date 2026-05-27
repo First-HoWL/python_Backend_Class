@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from datetime import datetime
 from django.shortcuts import redirect
 
+import json
+import requests
 from .forms import *
 from .admin import *
 # Create your views here.
@@ -237,6 +239,75 @@ def deposit(request):
 
     return render(request, "library/deposit.html", {'form': form})
 
+def get_catalog(request):
+
+    response = requests.get('https://fakestoreapi.com/products')
+    
+    context = {
+        "response" : response.json()
+    }
+
+    return render(request, 'library/catalog.html', context)
+
+def get_cart(request):
+    response = requests.get('https://fakestoreapi.com/products')
+    
+    context = {
+        "response" : [],
+    }
+
+    card = request.session.get("card", [])
+    print("cart:")
+    print(card)
+    for card_el in card:
+        ellem = next((x for x in response.json() if int(x["id"]) == int(card_el["id"])), None)
+        print(ellem)
+        if ellem:
+            context["response"].append(
+                    { 
+                        "product" : ellem, 
+                        "count" : card_el["count"]
+                    }
+                )
+
+    
+    return render(request, 'library/cart.html', context)
+
+def get_product(request, id):
+    response = requests.get(f'https://fakestoreapi.com/products/{id}')
+
+    #print(response.json())
+    context = {
+        "product" : response.json()
+    }
+
+    if request.method == "GET":
+        checked = request.session.get("checked", [])
+        print(checked)
+        context["checked"] = id in checked
+        if id not in checked:
+            checked.append(id)
+        request.session["checked"] = checked
+        request.session.modified = True
+
+        add_to_cart = request.GET.get("add_to_cart")
+        if add_to_cart:
+            card = request.session.get("card", [])
+
+            product = next((x for x in card if x["id"] == add_to_cart), None)
+            print(card)
+            if not product:
+                card.append({
+                    "id": add_to_cart,
+                    "count": 1
+                })
+            else:
+                product["count"] += 1
+
+            request.session['card'] = card
+            request.session.modified = True
+
+    return render(request, 'library/one_product.html', context)
 
 def get404(request, exception):
     return render(request, 'library/404.html')

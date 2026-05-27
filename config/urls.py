@@ -28,6 +28,9 @@ urlpatterns = [
     path('day/<str:day>', views.get_day, name="day"),
     path('teachers/', views.get_teachers, name="teachers"),
     path('teachers/add', views.teachers_add, name="add_teacher"),
-    path('deposit/', views.deposit, name="deposit")
+    path('deposit/', views.deposit, name="deposit"),
+    path('catalog/', views.get_catalog, name="catalog"),
+    path('cart/', views.get_cart, name="cart"),
+    path('product/<int:id>', views.get_product, name="product")
     
 ]

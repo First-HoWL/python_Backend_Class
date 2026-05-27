@@ -65,3 +65,12 @@ class Lessons(models.Model):
     def __str__(self):
         return f"{self.id} | {self.time} | {self.SubjectId=} | {self.TeacherId=} | {self.notes} | {self.status} | {self.day} | {self.group}"
 
+# class Product:
+#     title = ""
+#     price = 0.
+#     description = ""
+#     category = ""
+#     image = ""
+#     rate = 0.
+#     count = 0
+    

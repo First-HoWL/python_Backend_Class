@@ -1,0 +1,171 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Catalog{% endblock %}
+
+{% block content %}
+
+<div class="section catalog-section">
+
+    <div class="page-header">
+        <p class="page-eyebrow">Fakestore</p>
+        <h1 class="page-title">Product Catalog</h1>
+    </div>
+
+    <div class="filters-bar">
+        <div class="filter-group">
+            <label class="filter-label" for="filter-category">Category</label>
+            <div class="select-wrap">
+                <select id="filter-category" class="filter-select">
+                    <option value="">All categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat }}">{{ cat|title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="filter-group filter-group--price">
+            <label class="filter-label">
+                Max price: <span id="price-display" class="filter-value">$1000</span>
+            </label>
+            <input type="range" id="filter-price" class="filter-range"
+                   min="0" max="1000" value="1000" step="10">
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Min rating</label>
+            <div class="rating-btns" id="rating-btns">
+                <button class="rating-btn active" data-val="0">All</button>
+                <button class="rating-btn" data-val="3">3+</button>
+                <button class="rating-btn" data-val="4">4+</button>
+                <button class="rating-btn" data-val="4.5">4.5+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-bar">
+        <span class="results-count">
+            {{ response|length }} product(s) found
+        </span>
+        <button class="results-reset" id="reset-filters">Reset filters</button>
+    </div>
+
+    <div class="products-grid" id="products-grid">
+
+        {% for item in response %}
+            <a href="{% url 'product' item.id %}" class="product-card-link" style="text-decoration: none; color: inherit;">
+                <div class="product-card"
+                    data-category="{{ item.category }}"
+                    data-price="{{ item.price }}"
+                    data-rating="{{ item.rating.rate }}">
+
+                    <img src="{{ item.image }}" alt="{{ item.title }}" class="product-image">
+                    <h2 class="product-title">{{ item.title }}</h2>
+                    <p class="product-price">${{ item.price }}</p>
+                    <p class="product-rating">
+                        Rating: {{ item.rating.rate }} ({{ item.rating.count }} reviews)
+                    </p>
+                    <p class="product-description">
+                        {{ item.description }}
+                    </p>
+
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const priceRange = document.getElementById('filter-price');
+    const priceDisplay = document.getElementById('price-display');
+    const ratingButtons = document.querySelectorAll('.rating-btn');
+    const products = document.querySelectorAll('.product-card');
+    const resetButton = document.getElementById('reset-filters');
+    const toast = document.getElementById('toast');
+
+    let selectedPrice = 1000;
+    let selectedRating = 0;
+    let selectedCategory = '';
+
+    let toastTimeout;
+
+    function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    function applyFilters() {
+        let visibleCount = 0;
+
+        products.forEach(product => {
+            const price = parseFloat(product.dataset.price);
+            const rating = parseFloat(product.dataset.rating);
+            const category = product.dataset.category;
+
+            const matchPrice = price <= selectedPrice;
+            const matchRating = rating >= selectedRating;
+            const matchCategory = selectedCategory === '' || category === selectedCategory;
+
+            const show = matchPrice && matchRating && matchCategory;
+
+            product.style.display = show ? 'block' : 'none';
+
+            if (show) visibleCount++;
+        });
+
+        document.querySelector('.results-count').textContent =
+            `${visibleCount} product(s) found`;
+    }
+
+    priceRange.addEventListener('input', function () {
+        selectedPrice = parseFloat(this.value);
+        priceDisplay.textContent = `$${selectedPrice}`;
+        applyFilters();
+    });
+
+    ratingButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            ratingButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+
+            selectedRating = parseFloat(this.dataset.val);
+            applyFilters();
+        });
+    });
+
+    document.getElementById('filter-category').addEventListener('change', function () {
+        selectedCategory = this.value;
+        applyFilters();
+    });
+
+    resetButton.addEventListener('click', function () {
+        selectedPrice = 1000;
+        selectedRating = 0;
+        selectedCategory = '';
+
+        priceRange.value = 1000;
+        priceDisplay.textContent = '$1000';
+
+        document.getElementById('filter-category').value = '';
+
+        ratingButtons.forEach(btn => btn.classList.remove('active'));
+        ratingButtons[0].classList.add('active');
+
+        applyFilters();
+        showToast('Filters reset');
+    });
+
+    applyFilters();
+});
+</script>
+
+{% endblock %}
