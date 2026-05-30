@@ -3,7 +3,7 @@
 {% block nav_schedule %} active{% endblock %}
 
 {% block content %}
-<section class="section section--wide contacts-section">
+<section class="section contacts-section" style="max-width:100%; padding: 64px 32px;">
   <div class="page-header">
     <span class="page-eyebrow">TIMETABLE</span>
     <h1 class="page-title">Weekly Schedule</h1>
@@ -17,6 +17,7 @@
     <table class="week-schedule-table">
       <thead>
         <tr>
+          <th class="time-header-cell"></th>
           <th class="day-header{% if 'Monday' == today %} day-header--today{% endif %}"><a href="{% url 'day' 'Monday' %}">Monday</a></th>
           <th class="day-header{% if 'Tuesday' == today %} day-header--today{% endif %}"><a href="{% url 'day' 'Tuesday' %}">Tuesday</a></th>
           <th class="day-header{% if 'Wednesday' == today %} day-header--today{% endif %}"><a href="{% url 'day' 'Wednesday' %}">Wednesday</a></th>
@@ -27,134 +28,51 @@
         </tr>
       </thead>
       <tbody>
+
         <tr class="lesson-row">
-          <td class="day-cell">
-            {% if schedule.days.Monday %}
-              <div class="lessons-list">
-                {% for lesson in schedule.days.Monday %}
-                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
-                    <div class="lesson-time">{{ lesson.time }}</div>
-                    <div class="lesson-subject">{{ lesson.subject }}</div>
-                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
-                    {% if lesson.notes %}
-                      <div class="lesson-notes">{{ lesson.notes }}</div>
-                    {% endif %}
-                  </div>
-                {% endfor %}
-              </div>
-            {% else %}
-              <div class="no-lessons">No classes</div>
-            {% endif %}
-          </td>
-          <td class="day-cell">
-            {% if schedule.days.Tuesday %}
-              <div class="lessons-list">
-                {% for lesson in schedule.days.Tuesday %}
-                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
-                    <div class="lesson-time">{{ lesson.time }}</div>
-                    <div class="lesson-subject">{{ lesson.subject }}</div>
-                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
-                    {% if lesson.notes %}
-                      <div class="lesson-notes">{{ lesson.notes }}</div>
-                    {% endif %}
-                  </div>
-                {% endfor %}
-              </div>
-            {% else %}
-              <div class="no-lessons">No classes</div>
-            {% endif %}
-          </td>
-          <td class="day-cell">
-            {% if schedule.days.Wednesday %}
-              <div class="lessons-list">
-                {% for lesson in schedule.days.Wednesday %}
-                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
-                    <div class="lesson-time">{{ lesson.time }}</div>
-                    <div class="lesson-subject">{{ lesson.subject }}</div>
-                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
-                    {% if lesson.notes %}
-                      <div class="lesson-notes">{{ lesson.notes }}</div>
-                    {% endif %}
-                  </div>
-                {% endfor %}
-              </div>
-            {% else %}
-              <div class="no-lessons">No classes</div>
-            {% endif %}
-          </td>
-          <td class="day-cell">
-            {% if schedule.days.Thursday %}
-              <div class="lessons-list">
-                {% for lesson in schedule.days.Thursday %}
-                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
-                    <div class="lesson-time">{{ lesson.time }}</div>
-                    <div class="lesson-subject">{{ lesson.subject }}</div>
-                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
-                    {% if lesson.notes %}
-                      <div class="lesson-notes">{{ lesson.notes }}</div>
-                    {% endif %}
-                  </div>
-                {% endfor %}
-              </div>
-            {% else %}
-              <div class="no-lessons">No classes</div>
-            {% endif %}
-          </td>
-          <td class="day-cell">
-            {% if schedule.days.Friday %}
-              <div class="lessons-list">
-                {% for lesson in schedule.days.Friday %}
-                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
-                    <div class="lesson-time">{{ lesson.time }}</div>
-                    <div class="lesson-subject">{{ lesson.subject }}</div>
-                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
-                    {% if lesson.notes %}
-                      <div class="lesson-notes">{{ lesson.notes }}</div>
-                    {% endif %}
-                  </div>
-                {% endfor %}
-              </div>
-            {% else %}
-              <div class="no-lessons">No classes</div>
-            {% endif %}
-          </td>
-          <td class="day-cell">
-            {% if schedule.days.Saturday %}
-              <div class="lessons-list">
-                {% for lesson in schedule.days.Saturday %}
-                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
-                    <div class="lesson-time">{{ lesson.time }}</div>
-                    <div class="lesson-subject">{{ lesson.subject }}</div>
-                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
-                    {% if lesson.notes %}
-                      <div class="lesson-notes">{{ lesson.notes }}</div>
-                    {% endif %}
-                  </div>
-                {% endfor %}
-              </div>
-            {% else %}
-              <div class="no-lessons">No classes</div>
-            {% endif %}
-          </td>
-          <td class="day-cell">
-            {% if schedule.days.Sunday %}
-              <div class="lessons-list">
-                {% for lesson in schedule.days.Sunday %}
-                  <div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}">
-                    <div class="lesson-time">{{ lesson.time }}</div>
-                    <div class="lesson-subject">{{ lesson.subject }}</div>
-                    <div class="lesson-teacher">{{ lesson.teacher }}</div>
-                    {% if lesson.notes %}
-                      <div class="lesson-notes">{{ lesson.notes }}</div>
-                    {% endif %}
-                  </div>
-                {% endfor %}
-              </div>
-            {% else %}
-              <div class="no-lessons">No classes</div>
-            {% endif %}
-          </td>
+          <td class="time-cell"><span class="time-slot-label">1. 08:30</span></td>
+          <td class="day-cell">{% for lesson in schedule.days.Monday %}{% if lesson.time == "08:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Tuesday %}{% if lesson.time == "08:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Wednesday %}{% if lesson.time == "08:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Thursday %}{% if lesson.time == "08:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Friday %}{% if lesson.time == "08:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Saturday %}{% if lesson.time == "08:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Sunday %}{% if lesson.time == "08:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
         </tr>
+
+        <tr class="lesson-row">
+          <td class="time-cell"><span class="time-slot-label">2. 11:00</span></td>
+          <td class="day-cell">{% for lesson in schedule.days.Monday %}{% if lesson.time == "11:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Tuesday %}{% if lesson.time == "11:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Wednesday %}{% if lesson.time == "11:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Thursday %}{% if lesson.time == "11:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Friday %}{% if lesson.time == "11:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Saturday %}{% if lesson.time == "11:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Sunday %}{% if lesson.time == "11:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+        </tr>
+
+        <tr class="lesson-row">
+          <td class="time-cell"><span class="time-slot-label">3. 12:30</span></td>
+          <td class="day-cell">{% for lesson in schedule.days.Monday %}{% if lesson.time == "12:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Tuesday %}{% if lesson.time == "12:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Wednesday %}{% if lesson.time == "12:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Thursday %}{% if lesson.time == "12:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Friday %}{% if lesson.time == "12:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Saturday %}{% if lesson.time == "12:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Sunday %}{% if lesson.time == "12:30" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+        </tr>
+
+        <tr class="lesson-row">
+          <td class="time-cell"><span class="time-slot-label">4. 14:00</span></td>
+          <td class="day-cell">{% for lesson in schedule.days.Monday %}{% if lesson.time == "14:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Tuesday %}{% if lesson.time == "14:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Wednesday %}{% if lesson.time == "14:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Thursday %}{% if lesson.time == "14:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Friday %}{% if lesson.time == "14:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Saturday %}{% if lesson.time == "14:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+          <td class="day-cell">{% for lesson in schedule.days.Sunday %}{% if lesson.time == "14:00" %}<div class="lesson-item {% if lesson.status == 'cancelled' %}lesson-item--cancelled{% else %}lesson-item--active{% endif %}"><div class="lesson-subject">{{ lesson.subject }}</div><div class="lesson-teacher">{{ lesson.teacher }}</div>{% if lesson.notes %}<div class="lesson-notes">{{ lesson.notes }}</div>{% endif %}</div>{% endif %}{% endfor %}</td>
+        </tr>
+
       </tbody>
     </table>
   </div>
@@ -169,7 +87,6 @@
           <p class="skill-copy">Return to main page</p>
         </div>
       </a>
-
       <a href="/teachers/" class="skill-card">
         <div class="skill-icon-wrap"><img class="skill-img" src="https://cdn-icons-png.flaticon.com/512/475/475831.png" alt="Teachers"></div>
         <div class="skill-info">
