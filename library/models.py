@@ -1,15 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Post(models.Model):
-    header = models.CharField(max_length=256)
-    content = models.TextField()
-    author = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.id} | {self.header} by {self.author} at {self.created_at}"
-    
 class Teacher(models.Model):
     name = models.CharField(max_length=256)
     surname = models.CharField(max_length=256)
@@ -64,13 +56,3 @@ class Lessons(models.Model):
 
     def __str__(self):
         return f"{self.id} | {self.time} | {self.SubjectId=} | {self.TeacherId=} | {self.notes} | {self.status} | {self.day} | {self.group}"
-
-# class Product:
-#     title = ""
-#     price = 0.
-#     description = ""
-#     category = ""
-#     image = ""
-#     rate = 0.
-#     count = 0
-    
