@@ -31,6 +31,7 @@ urlpatterns = [
     path('deposit/', views.deposit, name="deposit"),
     path('catalog/', views.get_catalog, name="catalog"),
     path('cart/', views.get_cart, name="cart"),
-    path('product/<int:id>', views.get_product, name="product")
-    
+    path('product/<int:id>', views.get_product, name="product"),
+    path('lessons/', views.lesson),
+    path('lessons/<int:pk>', views.the_lesson)
 ]

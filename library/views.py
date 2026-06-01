@@ -3,11 +3,16 @@ from django.template import loader
 from django.http import HttpResponse
 from datetime import datetime
 from django.shortcuts import redirect
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import viewsets
 
 import json
 import requests
 from .forms import *
 from .admin import *
+from .serializers import *
 # Create your views here.
 
 days_of_week = [
@@ -308,6 +313,33 @@ def get_product(request, id):
             request.session.modified = True
 
     return render(request, 'library/one_product.html', context)
+
+
+@api_view(['GET', 'POST'])
+def lesson(request):
+    if request.method == "GET":
+        lessons = Lessons.objects.all()
+        serializer = LessonsSerializer(lessons, many=True)
+        return Response(serializer.data)
+    if request.method == "POST":
+        serializer = LessonsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE', 'PUT'])
+def the_lesson(request, pk):
+    lesson = Lessons.objects.get(pk=pk)
+    if request.method == 'DELETE':
+        lesson.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    if request.method == 'PUT':
+        serializer = LessonsSerializer(lesson, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def get404(request, exception):
     return render(request, 'library/404.html')
