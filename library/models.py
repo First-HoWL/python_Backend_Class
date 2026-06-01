@@ -1,4 +1,6 @@
 from django.db import models
+import random
+
 
 # Create your models here.
 class Post(models.Model):
@@ -65,12 +67,44 @@ class Lessons(models.Model):
     def __str__(self):
         return f"{self.id} | {self.time} | {self.SubjectId=} | {self.TeacherId=} | {self.notes} | {self.status} | {self.day} | {self.group}"
 
-# class Product:
-#     title = ""
-#     price = 0.
-#     description = ""
-#     category = ""
-#     image = ""
-#     rate = 0.
-#     count = 0
+class Character(models.Model):
+    name = models.TextField()
+    hp = models.FloatField()
+    attack = models.FloatField()
+    defense = models.FloatField()
+
+    def __str__(self):
+        return f"{self.id} | {self.name} | {self.hp} hp | {self.attack=} | {self.defense=}"
     
+
+    
+    @property
+    def hp_(self):
+        return self.hp
+
+    @hp_.setter
+    def hp_(self, value):
+        if value < 0:
+            self.hp = 0
+        else:
+            self.hp = round(value, 3)
+
+    def take_damage(self, damage):
+        new_damage = damage - min((damage * (self.defense / 100)), damage)
+        self.hp_ -= new_damage
+        return new_damage
+
+    def attack_char(self, other):
+        if self.is_alive:
+            damage_modify = self.attack + self.attack * (random.randint(-20, 20) / 100)
+            responce = other.take_damage(damage_modify)
+            if responce != -1:
+                return responce
+            else:
+                return -1
+        else:
+            return 0
+
+    @property
+    def is_alive(self):
+        return self.hp_ > 0

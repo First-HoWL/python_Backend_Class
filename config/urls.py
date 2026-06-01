@@ -32,6 +32,12 @@ urlpatterns = [
     path('catalog/', views.get_catalog, name="catalog"),
     path('cart/', views.get_cart, name="cart"),
     path('product/<int:id>', views.get_product, name="product"),
-    path('lessons/', views.lesson),
-    path('lessons/<int:pk>', views.the_lesson)
+
+
+    path('api/lessons/', views.lesson),
+    path('api/lessons/<int:pk>', views.the_lesson),
+
+    path('api/characters/', views.character_list),
+    path('api/characters/<int:pk>', views.character_detail),
+    path('api/battle', views.battle)
 ]

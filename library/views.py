@@ -341,5 +341,90 @@ def the_lesson(request, pk):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# CHARACTER 
+
+@api_view(['GET', 'POST'])
+def character_list(request):
+    if request.method == "GET":
+        characters = Character.objects.all()
+        serializer = CharacterSerializer(characters, many=True)
+        return Response(serializer.data)
+    
+    if request.method == "POST":
+        serializer = CharacterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET', 'DELETE', 'PUT'])
+def character_detail(request, pk):
+    try:
+        character = Character.objects.get(pk=pk)
+    except Character.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == "GET":
+        serializer = CharacterSerializer(character)
+        return Response(serializer.data)
+
+    if request.method == "DELETE":
+        character.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    if request.method == "PUT":
+        serializer = CharacterSerializer(character, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# CHARACTER BATTLE
+
+@api_view(['POST'])
+def battle(request):
+    data = request.data
+    if not data is None:
+        ch1_id = int(data["character_1"])
+        ch2_id = int(data["character_2"])
+        player = Character.objects.get(pk=ch1_id)
+        player2 = Character.objects.get(pk=ch2_id)
+        context = {
+            "battle_log": [],
+            "rounds": 0,
+            "winner": ""
+        }
+        
+        context['battle_log'].append(player.__repr__())
+        context['battle_log'].append(player2.__repr__())
+
+        while player.is_alive and player2.is_alive:
+            context['rounds'] += 1
+
+            
+
+            attack = player.attack_char(player2)
+
+            context['battle_log'].append(f"[{context['rounds']}]: {player.name} attacks {player2.name} with {round(attack, 3)} damage, {player2.name} has {round(player2.hp, 3)} hp")
+
+            attack = player2.attack_char(player)
+
+            context['battle_log'].append(f"[{context['rounds']}]: {player2.name} attacks {player.name} with {round(attack, 3)} damage, {player.name} has {round(player.hp, 3)} hp")
+                
+
+            if not player.is_alive:
+                context['winner'] = player2.name
+                context['battle_log'].append(f"{player2.name} - WIN!")
+            if not player2.is_alive:
+                context['winner'] = player.name
+                context['battle_log'].append(f"{player.name} - WIN!")
+
+        return Response(context, status=status.HTTP_200_OK)
+
+        
+    
+    
+
 def get404(request, exception):
     return render(request, 'library/404.html')
