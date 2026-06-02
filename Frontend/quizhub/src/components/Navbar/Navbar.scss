@@ -1,0 +1,109 @@
+@import '../../styles/variables';
+
+.navbar {
+  background: var(--bg-primary);
+  border-bottom: 0.5px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    height: 56px;
+  }
+
+  &__logo {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+
+    span { color: var(--accent); }
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex: 1;
+  }
+
+  &__link {
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: color var(--transition);
+
+    &:hover { color: var(--text-primary); }
+    &--active { color: var(--accent); font-weight: 500; }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  &__theme-btn {
+    background: transparent;
+    border: 0.5px solid var(--border-input);
+    border-radius: var(--radius-md);
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: background var(--transition);
+
+    &:hover { background: var(--bg-secondary); }
+  }
+
+  &__btn-sm {
+    font-size: 13px;
+    padding: 6px 14px;
+  }
+
+  &__burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    padding: 4px;
+
+    span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    &__links {
+      display: none;
+      position: absolute;
+      top: 56px;
+      left: 0;
+      right: 0;
+      background: var(--bg-primary);
+      border-bottom: 0.5px solid var(--border);
+      flex-direction: column;
+      padding: 16px 24px;
+      gap: 16px;
+
+      &--open { display: flex; }
+    }
+
+    &__burger { display: flex; }
+
+    &__actions .navbar__btn-sm:first-of-type { display: none; }
+  }
+}

@@ -1,0 +1,227 @@
+@import '../../styles/variables';
+
+.home {
+  &__hero {
+    background: var(--bg-primary);
+    padding: 64px 0 48px;
+    text-align: center;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  &__badge {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    border: 0.5px solid var(--accent-border);
+    border-radius: var(--radius-pill);
+    font-size: 13px;
+    padding: 5px 16px;
+    margin-bottom: 20px;
+  }
+
+  &__title {
+    font-size: 40px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+
+    span { color: var(--accent); }
+
+    @media (max-width: 600px) { font-size: 28px; }
+  }
+
+  &__subtitle {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  &__btns {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  &__stats {
+    background: var(--bg-secondary);
+    border-bottom: 0.5px solid var(--border);
+
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 64px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+
+      @media (max-width: 600px) { gap: 32px; }
+    }
+  }
+
+  &__stat {
+    text-align: center;
+  }
+
+  &__stat-num {
+    display: block;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  &__stat-lbl {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  &__featured {
+    padding: 40px 0;
+    background: var(--bg-secondary);
+  }
+
+  &__section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+
+    h2 {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+  }
+
+  &__see-all {
+    font-size: 13px;
+    color: var(--accent);
+
+    &:hover { text-decoration: underline; }
+  }
+
+  &__chips {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  &__chip {
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: var(--radius-pill);
+    border: 0.5px solid var(--border-input);
+    color: var(--text-muted);
+    background: var(--bg-card);
+    cursor: pointer;
+    transition: all var(--transition);
+
+    &:hover { border-color: var(--accent-border); color: var(--accent-dark); }
+
+    &--active {
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      border-color: var(--accent-border);
+    }
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-decoration: none;
+
+    h3 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+  }
+
+  &__card-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: auto;
+  }
+
+  &__card-rating {
+    margin-left: auto;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  &__features {
+    padding: 40px 0;
+    background: var(--bg-primary);
+    border-top: 0.5px solid var(--border);
+  }
+
+  &__section-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+  }
+
+  &__features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  &__feature {
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+
+    h3 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin: 10px 0 6px;
+    }
+
+    p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+  }
+
+  &__feature-icon {
+    font-size: 22px;
+  }
+
+  &__cta {
+    background: var(--accent-light);
+    border-top: 0.5px solid var(--accent-border);
+    padding: 48px 0;
+    text-align: center;
+
+    h2 {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+  }
+}

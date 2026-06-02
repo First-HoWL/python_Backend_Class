@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "scripts": {
+    "install": "cd quizhub && npm install",
+    "start": "cd quizhub && npm start"
+  },
+  "dependencies": {
+    "react-router-dom": "^7.16.0",
+    "sass": "^1.100.0"
+  }
+}

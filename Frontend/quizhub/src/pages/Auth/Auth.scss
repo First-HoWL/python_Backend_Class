@@ -1,0 +1,119 @@
+@import '../../styles/variables';
+
+.auth {
+  min-height: calc(100vh - 56px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background: var(--bg-secondary);
+
+  &__card {
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 400px;
+
+    h1 {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    > p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+  }
+
+  &__logo {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+
+    span { color: var(--accent); }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    input {
+      background: var(--bg-secondary);
+      border: 0.5px solid var(--border-input);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color var(--transition);
+
+      &::placeholder { color: var(--text-placeholder); }
+      &:focus { border-color: var(--accent); }
+    }
+  }
+
+  &__roles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  &__role-btn {
+    padding: 10px;
+    border-radius: var(--radius-md);
+    border: 0.5px solid var(--border-input);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all var(--transition);
+
+    &:hover { border-color: var(--accent-border); }
+
+    &--active {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent-dark);
+      font-weight: 500;
+    }
+  }
+
+  &__submit {
+    width: 100%;
+    justify-content: center;
+    padding: 11px;
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  &__switch {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 18px;
+
+    a {
+      color: var(--accent);
+      &:hover { text-decoration: underline; }
+    }
+  }
+}
