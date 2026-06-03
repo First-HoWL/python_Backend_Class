@@ -17,9 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from library import views
-
+from rest_framework_simplejwt.views import ( TokenObtainPairView, TokenRefreshView )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/tests', views.get_tests)
+    path('api/tests', views.get_tests),
+    path('api/answer_question', views.answer_question),
+    path('api/create_session', views.create_session),
+    path('api/get_test_result/<int:accauntId>/<int:sessionId>',views.get_test_result),
+    path('api/signin', views.create_accaunt),
+    path('api/auth', views.login_accaunt),
+    path('api/token/refresh/', TokenRefreshView.as_view())
 ]

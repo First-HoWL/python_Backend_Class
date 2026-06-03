@@ -1,15 +1,13 @@
 from django.db import models
-
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
-class Accaunt(models.Model):
-    login = models.TextField()
-    password = models.TextField()
-    name = models.TextField()
+class Accaunt(AbstractUser):
+    name = models.CharField()
     isTeacher = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"[{self.id}] {self.name} ({self.login})"
+        return f"[{self.id}] {self.name} ({self.username})"
 
 
 class Question(models.Model):
@@ -26,6 +24,8 @@ class Question(models.Model):
 class Test(models.Model):
     author = models.ForeignKey(Accaunt, on_delete=models.CASCADE)
     name = models.TextField()
+    category = models.TextField()
+    rating = models.FloatField()
 
     def __str__(self):
         return f"[{self.id}] Test by {self.author.name}"
@@ -66,4 +66,4 @@ class AccountToTestsCompletedQuestions(models.Model):
     testCompleted = models.ForeignKey(TestCompleted, on_delete=models.CASCADE)
     questionId = models.ForeignKey(QuestionInTest, on_delete=models.CASCADE)
     answer = models.TextField()
-
+    score = models.IntegerField(default=0)
