@@ -448,7 +448,7 @@ def add_questions_to_test(request):
     data = request.data
 
     required_fields = [
-        'questionsIds', # json
+        'questionsIds', # [2, 4, 1]
         'testId'
     ]
 
