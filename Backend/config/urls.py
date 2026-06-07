@@ -27,5 +27,8 @@ urlpatterns = [
     path('api/get_test_result/<int:accauntId>/<int:sessionId>',views.get_test_result),
     path('api/signin', views.create_accaunt),
     path('api/auth', views.login_accaunt),
+    path('api/create_question', views.create_question),
+    path('api/create_test', views.create_test),
+    path('api/add_questions_to_test', views.add_questions_to_test),
     path('api/token/refresh/', TokenRefreshView.as_view())
 ]

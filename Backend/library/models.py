@@ -37,6 +37,14 @@ class QuestionInTest(models.Model):
 
     def __str__(self):
         return f"[{self.id}] {self.question.question[:30]} in {self.test}"
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['test', 'question'],
+                name='unique_question_in_test'
+            )
+        ]
 
 
 class TestCompleted(models.Model):

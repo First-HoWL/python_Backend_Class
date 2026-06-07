@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -16,6 +16,8 @@ import json
 from .admin import *
 from .serializers import *
 # Create your views here.
+
+import random
 
 def get_accaunt_id_from_token(request):
     auth_header = request.headers.get("Authorization")
@@ -338,6 +340,161 @@ def create_accaunt(request):
                 "name": accaunt.name,
                 "isTeacher": accaunt.isTeacher
             }
+        },
+        status=status.HTTP_201_CREATED
+    )
+
+@api_view(['POST'])
+def create_question(request):
+    data = request.data
+
+    required_fields = [
+        'question',
+        'answers',
+        'score',
+        'correctAnswer'
+    ]
+
+    for field in required_fields:
+        if field not in data:
+            return Response(
+                {"error": f"Field '{field}' is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+    accaunt_id, error = get_accaunt_id_from_token(request)
+    
+    if error:
+        return Response(
+            {"error": error},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
+
+    question = str(data['question']).strip()
+    answers = str(data['answers'])
+    correctAnswer = str(data['correctAnswer'])
+    score = int(data['score'])
+    
+
+    question = Question.objects.create(
+        question=question,
+        answers=answers,
+        score=score,
+        correctAnswer=correctAnswer,
+        author = Accaunt.objects.get(id=accaunt_id)
+    )
+
+    return Response(
+        {
+            "success": True,
+            "question": {
+                "question": question.question,
+                "answers": question.answers,
+                "score": question.score,
+                "correctAnswer": question.correctAnswer
+            }
+        },
+        status=status.HTTP_201_CREATED
+    )
+
+@api_view(['POST'])
+def create_test(request):
+    data = request.data
+
+    required_fields = [
+        'name',
+        'category'
+    ]
+
+    for field in required_fields:
+        if field not in data:
+            return Response(
+                {"error": f"Field '{field}' is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+    accaunt_id, error = get_accaunt_id_from_token(request)
+    
+    if error:
+        return Response(
+            {"error": error},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
+
+    name = str(data['name']).strip()
+    category = str(data['category']).strip()
+
+    test = Question.objects.create(
+        name=name,
+        category=category,
+        author = Accaunt.objects.get(id=accaunt_id),
+        rating=(random.randint(300, 500) /100)
+    )
+
+    return Response(
+        {
+            "success": True,
+            "test": {
+                "name": test.name,
+                "category": test.category,
+                "rating": test.rating
+            }
+        },
+        status=status.HTTP_201_CREATED
+    )
+
+@api_view(['POST'])
+def add_questions_to_test(request):
+    data = request.data
+
+    required_fields = [
+        'questionsIds', # json
+        'testId'
+    ]
+
+    for field in required_fields:
+        if field not in data:
+            return Response(
+                {"error": f"Field '{field}' is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+    accaunt_id, error = get_accaunt_id_from_token(request)
+    
+    if error:
+        return Response(
+            {"error": error},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
+
+    questions = data['questionsIds']
+
+    testId = int(data['testId'])
+    
+    test = get_object_or_404(Test, id=testId)
+
+    if test.author_id != accaunt_id:
+        return Response(
+            {"error": "Test doesn`t belong to you!"},
+            status=status.HTTP_403_FORBIDDEN
+        )
+
+
+
+    test = Test.objects.get(id=testId)
+
+    for question_id in questions:
+        question = Question.objects.get(id=question_id)
+
+        QuestionInTest.objects.create(
+            test=test,
+            question=question
+        )
+
+    return Response(
+        {
+            "success": True,
+            "testId": testId
         },
         status=status.HTTP_201_CREATED
     )
