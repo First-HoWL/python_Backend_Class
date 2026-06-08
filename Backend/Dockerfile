@@ -27,7 +27,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 COPY . .
 
 # Collect static files (optional if using Django staticfiles)
-RUN python manage.py collectstatic --noinput
+# RUN python manage.py collectstatic --noinput
 
 # Expose application port
 EXPOSE 8000
