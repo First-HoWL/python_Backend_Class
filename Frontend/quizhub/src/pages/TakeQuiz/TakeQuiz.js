@@ -14,6 +14,7 @@ export default function TakeQuiz() {
   const [loadError, setLoadError] = useState('');
   const [submitError, setSubmitError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [dotsExpanded, setDotsExpanded] = useState(false);
   const sessionCreated = useRef(false);
 
   useEffect(() => {
@@ -30,7 +31,8 @@ export default function TakeQuiz() {
     const authToken = stored.access;
     if (!authToken) {
       // Нет токена — сессия невалидна, отправляем на логин
-      localStorage.removeItem('accaunt');
+      // clear in-memory session
+      import('../../api').then(mod => mod.clearSession()).catch(()=>{});
       navigate('/login');
       return;
     }
@@ -38,7 +40,7 @@ export default function TakeQuiz() {
     // Данные пользователя вложены в stored.accaunt
     const accauntData = stored.accaunt;
     if (!accauntData?.id) {
-      localStorage.removeItem('accaunt');
+      import('../../api').then(mod => mod.clearSession()).catch(()=>{});
       navigate('/login');
       return;
     }
@@ -52,28 +54,37 @@ export default function TakeQuiz() {
         }
 
         setQuizTitle(t.name || t.title || `Тест #${id}`);
-        setQuestions((t.questions || []).map(q => ({
-          id: q.id,
-          questionId: q.questionId ?? q.id,
-          text: q.question || q.text || 'Без тексту питання',
-          options: q.answers || [],
-          score: q.score || 0,
-        })));
+        setQuestions((t.questions || []).map(q => {
+          let options = q.answers || [];
+          if (typeof options === 'string') {
+            try { options = JSON.parse(options.replace(/'/g, '"')); } catch { options = []; }
+          }
+          if (!Array.isArray(options)) {
+            options = [];
+          }
+          return {
+            id: q.id,
+            questionId: q.questionId ?? q.id,
+            text: q.question || q.text || 'Без тексту питання',
+            options,
+            score: q.score || 0,
+          };
+        }));
 
         if (!sessionCreated.current) {
           sessionCreated.current = true;
-          try {
+            try {
             const session = await postApiJson(
               '/api/create_session',
               { testId: Number(id) },
               { auth: true }
             );
             setSessionId(session.sessionId);
-          } catch (err) {
+            } catch (err) {
             const message = err?.message || '';
             if (message.includes('HTTP 401')) {
-              sessionCreated.current = false; // сбрасываем флаг чтобы можно было повторить
-              localStorage.removeItem('accaunt');
+              sessionCreated.current = false; // сбрасываем флаг чтобы можно было повторити
+              import('../../api').then(mod => mod.clearSession()).catch(()=>{});
               navigate('/login');
               return;
             }
@@ -83,7 +94,7 @@ export default function TakeQuiz() {
       } catch (err) {
         const message = err?.message || 'Не вдалося завантажити тест';
         if (message.includes('HTTP 401')) {
-          localStorage.removeItem('accaunt');
+          import('../../api').then(mod => mod.clearSession()).catch(()=>{});
           navigate('/login');
           return;
         }
@@ -110,6 +121,7 @@ export default function TakeQuiz() {
   if (questions.length === 0) return <div className="container">Питань не знайдено.</div>;
 
   const q = questions[current];
+  const answeredCount = Object.keys(answers).length;
   const progress = ((current + 1) / questions.length) * 100;
   const isLast = current === questions.length - 1;
 
@@ -143,11 +155,11 @@ export default function TakeQuiz() {
         },
         { auth: true }
       );
-    } catch (err) {
+      } catch (err) {
       console.error('answer_question:', err);
       const message = err?.message || '';
       if (message.includes('HTTP 401')) {
-        localStorage.removeItem('accaunt');
+        import('../../api').then(mod => mod.clearSession()).catch(()=>{});
         navigate('/login');
         return;
       }
@@ -184,7 +196,7 @@ export default function TakeQuiz() {
           <p className="take-quiz__num">Питання {current + 1}</p>
           <h2 className="take-quiz__question">{q.text}</h2>
           <div className="take-quiz__options">
-            {q.options.map((opt, i) => (
+            {(Array.isArray(q.options) ? q.options : []).map((opt, i) => (
               <button
                 key={i}
                 className={`take-quiz__option ${answers[q.id] === opt ? 'take-quiz__option--selected' : ''}`}
@@ -209,16 +221,38 @@ export default function TakeQuiz() {
             </button>
           </div>
         </div>
-        <div className="take-quiz__dots">
-          {questions.map((_, i) => (
-            <div
-              key={i}
-              className={`take-quiz__dot
-                ${i === current ? 'take-quiz__dot--active' : ''}
-                ${answers[questions[i].id] ? 'take-quiz__dot--answered' : ''}
-              `}
-            />
-          ))}
+        <div className="take-quiz__dots-panel">
+          <div className="take-quiz__dots-info">
+            <div className="take-quiz__dots-summary">
+              Відповіли: <strong>{answeredCount}</strong> з {questions.length}
+            </div>
+            <button
+              type="button"
+              className={`btn btn--outline btn--sm take-quiz__dots-toggle ${dotsExpanded ? 'take-quiz__dots-toggle--open' : ''}`}
+              onClick={() => setDotsExpanded(open => !open)}
+            >
+              {dotsExpanded ? 'Приховати всі' : 'Показати всі питання'}
+            </button>
+          </div>
+        </div>
+        <div className={`take-quiz__dots ${dotsExpanded ? 'take-quiz__dots--expanded' : ''}`}>
+          {questions.map((question, i) => {
+            const answered = Boolean(answers[question.id]);
+            return (
+              <button
+                key={i}
+                type="button"
+                className={`take-quiz__dot
+                  ${i === current ? 'take-quiz__dot--active' : ''}
+                  ${answered ? 'take-quiz__dot--answered' : ''}
+                `}
+                onClick={() => setCurrent(i)}
+                aria-label={`Перейти до питання ${i + 1}${answered ? ', відповіли' : ''}`}
+              >
+                {dotsExpanded ? i + 1 : null}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

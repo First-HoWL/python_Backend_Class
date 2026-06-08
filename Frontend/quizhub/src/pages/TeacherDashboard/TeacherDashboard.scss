@@ -131,6 +131,13 @@
     text-decoration: none;
 
     &:hover { background: var(--bg-secondary); }
-    &--del:hover { background: var(--tag-red-bg); border-color: var(--tag-red-text); }
+    &--del {
+      color: var(--tag-red-text);
+      border-color: rgba(193, 71, 71, 0.2);
+    }
+    &--del:hover {
+      background: var(--tag-red-bg);
+      border-color: var(--tag-red-text);
+    }
   }
 }

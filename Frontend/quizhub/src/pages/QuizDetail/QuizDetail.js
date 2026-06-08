@@ -25,10 +25,7 @@ export default function QuizDetail() {
             tag: 'purple',
             questions: Array.isArray(t.questions) ? t.questions.length : 0,
             time: Array.isArray(t.questions) ? Math.max(1, t.questions.length) : 0,
-            rating: 0,
-            attempts: t.attempts || 0,
             author: t.author?.name || t.author?.login || (typeof t.author === 'string' ? t.author : 'Автор'),
-            difficulty: '—',
             createdAt: t.createdAt || ''
           });
         } else {
@@ -65,20 +62,6 @@ export default function QuizDetail() {
                   <span className="quiz-detail__meta-val">{quiz.time} хв</span>
                 </div>
               </div>
-              <div className="quiz-detail__meta-item">
-                <span className="quiz-detail__meta-icon">📈</span>
-                <div>
-                  <span className="quiz-detail__meta-label">Складність</span>
-                  <span className="quiz-detail__meta-val">{quiz.difficulty}</span>
-                </div>
-              </div>
-              <div className="quiz-detail__meta-item">
-                <span className="quiz-detail__meta-icon">👥</span>
-                <div>
-                  <span className="quiz-detail__meta-label">Проходжень</span>
-                  <span className="quiz-detail__meta-val">{quiz.attempts}</span>
-                </div>
-              </div>
             </div>
 
             <div className="quiz-detail__reviews">
@@ -97,8 +80,6 @@ export default function QuizDetail() {
 
           <aside className="quiz-detail__sidebar">
             <div className="quiz-detail__start-card">
-              <div className="quiz-detail__rating">★ {quiz.rating}</div>
-              <p className="quiz-detail__rating-lbl">{quiz.attempts} проходжень</p>
               <Link to={`/quizzes/${id}/take`} className="btn btn--primary quiz-detail__start-btn">
                 Почати тест
               </Link>

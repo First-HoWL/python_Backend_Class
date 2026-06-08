@@ -1,6 +1,23 @@
 export const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000';
 
-const SESSION_STORAGE_KEY = 'accaunt';
+const SESSION_COOKIE = 'quizhub_session';
+const COOKIE_DAYS = 14;
+
+function setCookie(name, value, days = COOKIE_DAYS) {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+}
+
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.*+?^${}()|[\]\\])/g, '\\$1') + '=([^;]*)'));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function deleteCookie(name) {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
+}
+
+let IN_MEMORY_SESSION = null;
 
 function normalizeApiPath(path) {
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
@@ -40,9 +57,19 @@ function normalizeSession(session) {
   return { access, refresh, accaunt };
 }
 
+function getSessionFromCookie() {
+  const raw = getCookie(SESSION_COOKIE);
+  if (!raw) return null;
+  const saved = parseSessionValue(raw);
+  if (!saved) return null;
+  const normalized = normalizeSession(saved);
+  IN_MEMORY_SESSION = normalized;
+  return normalized;
+}
+
 function getSession() {
-  const stored = parseSessionValue(localStorage.getItem(SESSION_STORAGE_KEY));
-  return normalizeSession(stored);
+  if (IN_MEMORY_SESSION) return normalizeSession(IN_MEMORY_SESSION);
+  return getSessionFromCookie();
 }
 
 function getAuthToken() {
@@ -55,14 +82,18 @@ export function getStoredAccaunt() {
 
 export function saveSession(data) {
   const normalized = normalizeSession(data);
-  if (!normalized) return null;
+  IN_MEMORY_SESSION = normalized;
   try {
-    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(normalized));
-    return normalized;
-  } catch (err) {
-    console.error('Unable to save auth session to localStorage', err);
-    return null;
+    setCookie(SESSION_COOKIE, JSON.stringify(normalized));
+  } catch {
+    // ignore cookie write failures
   }
+  return normalized;
+}
+
+export function clearSession() {
+  IN_MEMORY_SESSION = null;
+  deleteCookie(SESSION_COOKIE);
 }
 
 async function tryRefreshToken() {
@@ -81,10 +112,11 @@ async function tryRefreshToken() {
     const data = await response.json();
     if (!data.access) return false;
 
-    localStorage.setItem('accaunt', JSON.stringify({
+    // update in-memory session
+    IN_MEMORY_SESSION = {
       ...stored,
       access: data.access,
-    }));
+    };
     return true;
   } catch {
     return false;
@@ -131,8 +163,8 @@ async function fetchWithRefresh(url, fetchOptions, options) {
       };
       response = await fetch(url, newFetchOptions);
     } else {
-      localStorage.removeItem('accaunt');
-      // Бросаем явно — чтобы вызывающий код попал в catch и мог сделать navigate('/login')
+      // Clear session cookie and signal expired session
+      clearSession();
       throw new Error('HTTP 401: Session expired');
     }
   }

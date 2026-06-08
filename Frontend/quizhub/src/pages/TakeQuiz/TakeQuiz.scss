@@ -149,22 +149,92 @@
     font-size: 14px;
   }
 
+  &__dots-panel {
+    margin-top: 24px;
+    padding: 18px 18px 14px;
+    border-radius: 22px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+  }
+
+  &__dots-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  &__dots-summary {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  &__dots-toggle {
+    min-width: auto;
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
   &__dots {
     display: flex;
     justify-content: center;
     gap: 8px;
-    margin-top: 24px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
   }
 
   &__dot {
     width: 10px;
     height: 10px;
+    min-width: 10px;
     border-radius: 50%;
+    border: none;
     background: var(--border);
+    cursor: pointer;
     transition: all var(--transition);
+    flex: 0 0 auto;
+  }
 
-    &--active { background: var(--accent); width: 24px; border-radius: 999px; }
-    &--answered { background: var(--accent-border); }
-    &--active.take-quiz__dot--answered { background: var(--accent); }
+  &__dot--active { background: var(--accent); width: 24px; border-radius: 999px; }
+  &__dot--answered { background: var(--accent-border); }
+  &__dot--active.take-quiz__dot--answered { background: var(--accent); }
+
+  &__dots--expanded {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  &__dots--expanded .take-quiz__dot {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__dots--expanded .take-quiz__dot--answered {
+    background: rgba(60, 132, 255, 0.12);
+    color: var(--accent-dark);
+    border-color: var(--accent-border);
+  }
+
+  &__dots--expanded .take-quiz__dot--active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  &__dots--expanded .take-quiz__dot:hover {
+    transform: translateY(-1px);
   }
 }

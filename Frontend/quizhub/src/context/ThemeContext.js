@@ -3,12 +3,11 @@ import { createContext, useContext, useState, useEffect } from "react";
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-    const [theme, setTheme] = useState(() => {
-        return localStorage.getItem("qh-theme") || "light"; });
+    // Keep theme in-memory only to avoid persisting preferences
+    const [theme, setTheme] = useState('light');
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('qh-theme', theme);
     }, [theme]);
 
     const toggle = () => setTheme((prev) => (prev === "light" ? "dark" : "light"));

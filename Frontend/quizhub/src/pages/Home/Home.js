@@ -1,24 +1,26 @@
 import { Link } from 'react-router-dom';
+import { getStoredAccaunt } from '../../api';
 import './Home.scss';
 
 const FEATURED = [
-  { id: 1, title: 'Основи Python', category: 'Програмування', tag: 'purple', questions: 20, time: 15, rating: 4.8 },
-  { id: 2, title: 'Алгебра 9 клас', category: 'Математика', tag: 'teal', questions: 15, time: 20, rating: 4.5 },
-  { id: 3, title: 'Англійська B1', category: 'Мови', tag: 'amber', questions: 30, time: 25, rating: 4.9 },
+  { id: 1, title: 'Основи Python', category: 'Програмування', tag: 'purple', questions: 20, time: 15 },
+  { id: 2, title: 'Алгебра 9 клас', category: 'Математика', tag: 'teal', questions: 15, time: 20 },
+  { id: 3, title: 'Англійська B1', category: 'Мови', tag: 'amber', questions: 30, time: 25 },
 ];
 
 const FEATURES = [
-  { icon: '🤖', title: 'AI-генерація питань', desc: 'Вкажи тему — отримай готові питання за секунди' },
+  { icon: '⚡', title: 'Швидке створення питань', desc: 'Вкажи тему та створюй тести за хвилини' },
   { icon: '📊', title: 'Детальна статистика', desc: 'Відстежуй прогрес і порівнюй результати з іншими' },
   { icon: '✏️', title: 'Кабінет вчителя', desc: 'Створюй, редагуй та керуй тестами легко' },
 ];
 
 export default function Home() {
+  const stored = getStoredAccaunt();
+  const isTeacher = !!stored?.accaunt?.isTeacher;
   return (
     <div className="home">
       <section className="home__hero">
         <div className="container">
-          <div className="home__badge">AI-генерація питань</div>
           <h1 className="home__title">
             Платформа для<br />
             <span>розумних тестів</span>
@@ -29,7 +31,7 @@ export default function Home() {
           </p>
           <div className="home__btns">
             <Link to="/quizzes" className="btn btn--primary">Переглянути тести</Link>
-            <Link to="/register" className="btn btn--outline">Створити тест</Link>
+            {isTeacher && <Link to="/teacher/create" className="btn btn--outline">Створити тест</Link>}
           </div>
         </div>
       </section>
@@ -64,7 +66,6 @@ export default function Home() {
                 <div className="home__card-meta">
                   <span>{q.questions} питань</span>
                   <span>{q.time} хв</span>
-                  <span className="home__card-rating">★ {q.rating}</span>
                 </div>
               </Link>
             ))}

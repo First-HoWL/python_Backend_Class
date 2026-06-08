@@ -27,6 +27,17 @@ function PrivateRoute({ children }) {
   return children;
 }
 
+function TeacherRoute({ children }) {
+  const session = getStoredAccaunt();
+  if (!session?.access) {
+    return <Navigate to="/login" replace />;
+  }
+  if (!session?.accaunt?.isTeacher) {
+    return <Navigate to="/" replace />;
+  }
+  return children;
+}
+
 export default function App() {
   return (
     <ThemeProvider>
@@ -47,20 +58,19 @@ export default function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/teacher" element={
-                <PrivateRoute><TeacherDashboard /></PrivateRoute>
+                <TeacherRoute><TeacherDashboard /></TeacherRoute>
               } />
               <Route path="/teacher/create" element={
-                <PrivateRoute><CreateQuiz /></PrivateRoute>
+                <TeacherRoute><CreateQuiz /></TeacherRoute>
               } />
               <Route path="/teacher/edit/:id" element={
-                <PrivateRoute><CreateQuiz /></PrivateRoute>
+                <TeacherRoute><CreateQuiz /></TeacherRoute>
               } />
               <Route path="/profile" element={
                 <PrivateRoute><Profile /></PrivateRoute>
               } />
               <Route path="*" element={<NotFound />} />
               <Route path="/404" element={<NotFound />} />
-              <Route path="leaderboard" element={<TeacherDashboard />} />
             </Routes>
           </main>
           <Footer />

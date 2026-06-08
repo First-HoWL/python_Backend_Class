@@ -25,7 +25,7 @@ class Test(models.Model):
     author = models.ForeignKey(Accaunt, on_delete=models.CASCADE)
     name = models.TextField()
     category = models.TextField()
-    rating = models.FloatField()
+    rating = models.FloatField(default=0.0)
 
     def __str__(self):
         return f"[{self.id}] Test by {self.author.name}"

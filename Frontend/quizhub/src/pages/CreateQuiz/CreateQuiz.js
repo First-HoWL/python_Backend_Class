@@ -1,18 +1,20 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { postApiJson, getApiJson, getStoredAccaunt, API_BASE } from '../../api';
 import './CreateQuiz.scss';
 
 const EMPTY_Q = () => ({ id: Date.now(), text: '', options: ['', '', '', ''], correct: 0 });
 
 export default function CreateQuiz() {
+  const navigate = useNavigate();
   const { id } = useParams();
-  const isEdit = Boolean(id);
-
-  const [meta, setMeta] = useState({ title: '', description: '', category: 'Програмування', difficulty: 'Середнє' });
+  const isEditMode = Boolean(id);
+  const [meta, setMeta] = useState({ title: '', category: 'Програмування' });
   const [questions, setQuestions] = useState([EMPTY_Q()]);
-  const [aiTopic, setAiTopic] = useState('');
-  const [aiCount, setAiCount] = useState(5);
-  const [aiLoading, setAiLoading] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [loading, setLoading] = useState(isEditMode);
+  const [error, setError] = useState('');
+  const [loadError, setLoadError] = useState('');
 
   const setMF = k => e => setMeta(p => ({ ...p, [k]: e.target.value }));
 
@@ -22,25 +24,142 @@ export default function CreateQuiz() {
   const setOpt = (qi, oi, v) => setQuestions(p => p.map((q, idx) => idx === qi ? { ...q, options: q.options.map((o, j) => j === oi ? v : o) } : q));
   const setCorrect = (qi, oi) => setQuestions(p => p.map((q, idx) => idx === qi ? { ...q, correct: oi } : q));
 
-  const simulateAI = () => {
-    setAiLoading(true);
-    setTimeout(() => {
-      const generated = Array.from({ length: aiCount }, (_, i) => ({
-        ...EMPTY_Q(),
-        text: `AI-питання ${i + 1} по темі "${aiTopic}"`,
-        options: ['Варіант A', 'Варіант B', 'Варіант C', 'Варіант D'],
-        correct: 0,
-      }));
-      setQuestions(p => [...p.filter(q => q.text), ...generated]);
-      setAiLoading(false);
-    }, 1400);
+  const normalizeAnswers = answers => {
+    if (Array.isArray(answers)) return answers;
+    if (typeof answers === 'string') {
+      try { return JSON.parse(answers); } catch (e) { return []; }
+    }
+    return [];
   };
+
+  useEffect(() => {
+    if (!isEditMode) return;
+
+    const stored = getStoredAccaunt();
+    if (!stored?.access) {
+      navigate('/login');
+      return;
+    }
+
+    setLoading(true);
+    setLoadError('');
+
+    getApiJson(`/api/tests/${id}`, { auth: true })
+      .then(test => {
+        setMeta({ title: test.name || '', category: test.category || 'Програмування' });
+        const questionItems = test.questions || [];
+        setQuestions(questionItems.length ? questionItems.map(q => {
+          const answers = normalizeAnswers(q.answers).concat(['', '', '', '']).slice(0, 4);
+          const correctIdx = answers.findIndex(a => a === q.correctAnswer);
+          return {
+            id: q.id || Date.now(),
+            questionId: q.questionId || null,
+            text: q.question || '',
+            options: answers,
+            correct: correctIdx >= 0 ? correctIdx : 0,
+          };
+        }) : [EMPTY_Q()]);
+      })
+      .catch(() => {
+        setLoadError('Не вдалося завантажити тест для редагування');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [id, isEditMode, navigate]);
+
+  const publish = async () => {
+    setError('');
+
+    if (!meta.title.trim()) { setError('Введіть назву тесту'); return; }
+
+    const invalid = questions.find(q => !q.text.trim() || q.options.some(o => !o.trim()));
+    if (invalid) { setError('Заповніть усі питання та варіанти відповідей'); return; }
+
+    setPublishing(true);
+    try {
+      if (isEditMode) {
+        const stored = getStoredAccaunt();
+        if (!stored?.access) {
+          navigate('/login');
+          return;
+        }
+
+        await fetch(`${API_BASE}/api/tests/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: `Bearer ${stored.access}`,
+          },
+          body: JSON.stringify({
+            name: meta.title.trim(),
+            category: String(meta.category || 'Програмування'),
+            questions: questions.map(q => ({
+              questionId: q.questionId,
+              id: q.id,
+              question: q.text.trim(),
+              answers: q.options.map(opt => String(opt || '')),
+              correctAnswer: String(q.options[q.correct] || ''),
+              score: 10,
+            })),
+          }),
+        });
+
+        navigate(`/quizzes/${id}`);
+        return;
+      }
+
+      const testRes = await postApiJson('/api/create_test', {
+        name: meta.title.trim(),
+        category: String(meta.category || 'Програмування'),
+      }, { auth: true });
+
+      const testId = testRes.test?.id || testRes.id;
+
+      const questionIds = [];
+      for (const q of questions) {
+        const qRes = await postApiJson('/api/create_question', {
+          question: q.text.trim(),
+          answers: q.options,
+          correctAnswer: q.options[q.correct],
+          score: 10,
+        }, { auth: true });
+        questionIds.push(qRes.question?.id || qRes.id);
+      }
+
+      await postApiJson('/api/add_questions_to_test', {
+        testId,
+        questionsIds: questionIds,
+      }, { auth: true });
+
+      navigate(`/quizzes/${testId}`);
+    } catch (err) {
+      setError(err.message || 'Помилка публікації');
+    } finally {
+      setPublishing(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="create-quiz">
+        <div className="container">
+          <div className="page-header">
+            <h1>{isEditMode ? 'Редагувати тест' : 'Створити тест'}</h1>
+            <p>Завантаження даних тесту...</p>
+          </div>
+          {loadError ? <p className="create-quiz__error">{loadError}</p> : <p>Зачекайте, будь ласка...</p>}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="create-quiz">
       <div className="container">
         <div className="page-header">
-          <h1>{isEdit ? 'Редагувати тест' : 'Створити тест'}</h1>
+          <h1>{isEditMode ? 'Редагувати тест' : 'Створити тест'}</h1>
           <p>Заповни основну інформацію та додай питання</p>
         </div>
 
@@ -54,53 +173,13 @@ export default function CreateQuiz() {
                 <input type="text" placeholder="Наприклад: Основи Python" value={meta.title} onChange={setMF('title')} />
               </div>
               <div className="create-quiz__field">
-                <label>Опис</label>
-                <textarea rows={3} placeholder="Короткий опис тесту..." value={meta.description} onChange={setMF('description')} />
+                <label>Категорія</label>
+                <select value={meta.category} onChange={setMF('category')}>
+                  {['Програмування', 'Математика', 'Мови', 'Наука', 'Історія'].map(c => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
               </div>
-              <div className="create-quiz__row">
-                <div className="create-quiz__field">
-                  <label>Категорія</label>
-                  <select value={meta.category} onChange={setMF('category')}>
-                    {['Програмування', 'Математика', 'Мови', 'Наука', 'Історія'].map(c => (
-                      <option key={c}>{c}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="create-quiz__field">
-                  <label>Складність</label>
-                  <select value={meta.difficulty} onChange={setMF('difficulty')}>
-                    {['Легко', 'Середнє', 'Важко'].map(d => <option key={d}>{d}</option>)}
-                  </select>
-                </div>
-              </div>
-            </section>
-
-            <section className="create-quiz__block create-quiz__ai-block">
-              <div className="create-quiz__ai-head">
-                <div>
-                  <h2>AI-генерація питань</h2>
-                  <p>Gemini 2.0 Flash згенерує питання за темою</p>
-                </div>
-              </div>
-              <div className="create-quiz__row">
-                <div className="create-quiz__field" style={{ flex: 2 }}>
-                  <label>Тема для генерації</label>
-                  <input type="text" placeholder="Наприклад: списки та словники в Python" value={aiTopic} onChange={e => setAiTopic(e.target.value)} />
-                </div>
-                <div className="create-quiz__field">
-                  <label>Кількість питань</label>
-                  <select value={aiCount} onChange={e => setAiCount(Number(e.target.value))}>
-                    {[3, 5, 10, 15, 20].map(n => <option key={n}>{n}</option>)}
-                  </select>
-                </div>
-              </div>
-              <button
-                className="btn btn--ghost create-quiz__ai-btn"
-                onClick={simulateAI}
-                disabled={!aiTopic || aiLoading}
-              >
-                {aiLoading ? 'Генерую...' : 'Згенерувати питання'}
-              </button>
             </section>
 
             <section className="create-quiz__block">
@@ -143,17 +222,18 @@ export default function CreateQuiz() {
                 </div>
               ))}
             </section>
-
           </div>
 
           <aside className="create-quiz__sidebar">
             <div className="create-quiz__publish-card">
               <h3>Публікація</h3>
-              <button className="btn btn--primary create-quiz__publish-btn">
-                {isEdit ? 'Зберегти зміни' : 'Опублікувати тест'}
-              </button>
-              <button className="btn btn--outline create-quiz__publish-btn">
-                Зберегти як чернетку
+              {error && <p className="create-quiz__error">{error}</p>}
+              <button
+                className="btn btn--primary create-quiz__publish-btn"
+                onClick={publish}
+                disabled={publishing}
+              >
+                {publishing ? (isEditMode ? 'Зберігаю...' : 'Публікую...') : (isEditMode ? 'Зберегти зміни' : 'Опублікувати тест')}
               </button>
               <div className="create-quiz__publish-info">
                 <span>{questions.length} питань</span>

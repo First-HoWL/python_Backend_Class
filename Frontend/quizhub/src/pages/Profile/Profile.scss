@@ -58,6 +58,47 @@
     @media (max-width: 600px) { align-self: center; }
   }
 
+  &__edit-panel {
+    margin: 18px 0 28px;
+    padding: 20px;
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-xl);
+  }
+
+  &__form-row {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  &__form-row label {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  &__form-row input {
+    width: 100%;
+    min-height: 44px;
+    padding: 12px 14px;
+    border: 1px solid var(--border-input);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  &__form-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  &__form-message {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
   &__stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
