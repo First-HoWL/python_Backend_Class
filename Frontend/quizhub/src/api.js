@@ -1,4 +1,4 @@
-export const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000';
+export const API_BASE = process.env.REACT_APP_API_BASE || 'pythonbackendclass.railway.internal';
 
 const SESSION_COOKIE = 'quizhub_session';
 const COOKIE_DAYS = 14;
