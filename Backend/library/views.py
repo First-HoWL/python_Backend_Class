@@ -278,7 +278,7 @@ def create_session(request):
         )
     
     session = TestCompleted.objects.create(
-        accaount=accaunt, 
+        accaunt=accaunt,
         tests=test
     )
     return Response(
@@ -388,6 +388,7 @@ def create_question(request):
         {
             "success": True,
             "question": {
+                "id": question.id,
                 "question": question.question,
                 "answers": question.answers,
                 "score": question.score,
