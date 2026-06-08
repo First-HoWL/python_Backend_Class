@@ -1,7 +1,8 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
+import { getStoredAccaunt } from './api';
 
 import Home from './pages/Home/Home';
 import AllQuizzes from './pages/AllQuizzes/AllQuizzes';
@@ -17,6 +18,15 @@ import NotFound from './pages/NotFound/NotFound';
 
 import './styles/global.scss';
 
+// Защищённый роут — если нет токена, редиректит на /login
+function PrivateRoute({ children }) {
+  const session = getStoredAccaunt();
+  if (!session?.access) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+}
+
 export default function App() {
   return (
     <ThemeProvider>
@@ -28,14 +38,26 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/quizzes" element={<AllQuizzes />} />
               <Route path="/quizzes/:id" element={<QuizDetail />} />
-              <Route path="/quizzes/:id/take" element={<TakeQuiz />} />
-              <Route path="/quizzes/:id/results" element={<Results />} />
+              <Route path="/quizzes/:id/take" element={
+                <PrivateRoute><TakeQuiz /></PrivateRoute>
+              } />
+              <Route path="/quizzes/:id/results" element={
+                <PrivateRoute><Results /></PrivateRoute>
+              } />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/teacher" element={<TeacherDashboard />} />
-              <Route path="/teacher/create" element={<CreateQuiz />} />
-              <Route path="/teacher/edit/:id" element={<CreateQuiz />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/teacher" element={
+                <PrivateRoute><TeacherDashboard /></PrivateRoute>
+              } />
+              <Route path="/teacher/create" element={
+                <PrivateRoute><CreateQuiz /></PrivateRoute>
+              } />
+              <Route path="/teacher/edit/:id" element={
+                <PrivateRoute><CreateQuiz /></PrivateRoute>
+              } />
+              <Route path="/profile" element={
+                <PrivateRoute><Profile /></PrivateRoute>
+              } />
               <Route path="*" element={<NotFound />} />
               <Route path="/404" element={<NotFound />} />
               <Route path="leaderboard" element={<TeacherDashboard />} />

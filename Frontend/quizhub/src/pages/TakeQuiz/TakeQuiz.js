@@ -66,15 +66,15 @@ export default function TakeQuiz() {
             const session = await postApiJson(
               '/api/create_session',
               { testId: Number(id) },
-              { auth: true }  // postApiJson сам возьмёт токен через getAuthToken()
+              { auth: true }
             );
             setSessionId(session.sessionId);
           } catch (err) {
             const message = err?.message || '';
             if (message.includes('HTTP 401')) {
-              console.log(message)
+              sessionCreated.current = false; // сбрасываем флаг чтобы можно было повторить
               localStorage.removeItem('accaunt');
-              //navigate('/login');
+              navigate('/login');
               return;
             }
             throw err;

@@ -132,6 +132,8 @@ async function fetchWithRefresh(url, fetchOptions, options) {
       response = await fetch(url, newFetchOptions);
     } else {
       localStorage.removeItem('accaunt');
+      // Бросаем явно — чтобы вызывающий код попал в catch и мог сделать navigate('/login')
+      throw new Error('HTTP 401: Session expired');
     }
   }
 

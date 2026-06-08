@@ -2,7 +2,7 @@
 
 .take-quiz {
   padding: 40px 0 56px;
-  background: linear-gradient(180deg, rgba(255, 251, 247, 0.92), rgba(255, 248, 242, 0.98));
+  background: var(--bg-primary);
 
   .container {
     max-width: 720px;
@@ -102,7 +102,7 @@
 
     &--selected {
       border-color: var(--accent);
-      background: #fff6ef;
+      background: var(--accent-light);
       color: var(--accent-dark);
 
       .take-quiz__option-letter {
@@ -150,6 +150,7 @@
   }
 
   &__dots {
+    display: flex;
     justify-content: center;
     gap: 8px;
     margin-top: 24px;
